@@ -65,16 +65,16 @@ jobs:
               --name reday \
               --restart unless-stopped \
               -p 8080:8080 \
-              -e DB_HOST=${{ secrets.DB_HOST }} \
-              -e DB_NAME=${{ secrets.DB_NAME }} \
-              -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
-              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-              -e S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }} \
-              -e AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY_ID }} \
-              -e AWS_SECRET_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-              -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
-              $IMAGE
+              -e "DB_HOST=${{ secrets.DB_HOST }}" \
+              -e "DB_NAME=${{ secrets.DB_NAME }}" \
+              -e "DB_USERNAME=${{ secrets.DB_USERNAME }}" \
+              -e "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" \
+              -e "S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" \
+              -e "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY_ID }}" \
+              -e "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+              -e "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
+              -e "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" \
+              "$IMAGE"
 
       - name: Health check
         uses: appleboy/ssh-action@v1
