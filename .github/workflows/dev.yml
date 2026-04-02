@@ -84,13 +84,13 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            for i in {1..10}; do
+            for i in {1..30}; do
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health)
               if [ "$STATUS" = "200" ]; then
                 echo "Health check passed"
                 exit 0
               fi
-              echo "Waiting for app to start... ($i/10)"
+              echo "Waiting for app to start... ($i/30)"
               sleep 10
             done
             echo "Health check failed"
