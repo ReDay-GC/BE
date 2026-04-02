@@ -66,6 +66,7 @@ jobs:
               --restart unless-stopped \
               -p 8080:8080 \
               -e "SPRING_PROFILES_ACTIVE=dev" \
+              -e "SWAGGER_SERVER_URL=http://13.125.45.14:8080" \
               -e "DB_HOST=${{ secrets.DB_HOST }}" \
               -e "DB_NAME=${{ secrets.DB_NAME }}" \
               -e "DB_USERNAME=${{ secrets.DB_USERNAME }}" \
