@@ -2,7 +2,7 @@ package ReDay.memory.application.dto.request;
 
 import java.time.LocalDate;
 
-public record MemoryUpdateRequest(
+public record MemorySaveRequest(
         String title,
         String summary,
         String description,

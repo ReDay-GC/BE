@@ -1,4 +1,7 @@
 package ReDay.memory.application.dto.response;
 
-public class MemoryTagResponse {
+public record MemoryTagResponse(
+        Long tagId,
+        String tagName
+) {
 }

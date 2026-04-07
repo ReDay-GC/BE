@@ -1,4 +1,6 @@
 package ReDay.memory.application.dto.request;
 
-public class MemoryAnalysisRequest {
+public record MemoryAnalysisRequest(
+        Long memoryId
+) {
 }

@@ -1,4 +1,10 @@
 package ReDay.memory.application.dto.response;
 
-public class MemoryRecordResponse {
+public record MemoryRecordResponse(
+        Long recordId,
+        String recordType,
+        String contentUrl,
+        String textContent,
+        Integer voiceDurationSeconds
+) {
 }

@@ -1,4 +1,89 @@
 package ReDay.memory.domain.entity;
 
-public class Memory {
+import ReDay.domain.entity.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Entity
+@Table(name = "memory")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Memory extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 100)
+    private String title;
+
+    @Column(nullable = false, length = 255)
+    private String summary;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String description;
+
+    @Column(nullable = false)
+    private LocalDate memoryDate;
+
+    @Column(nullable = false, length = 50)
+    private String emotion;
+
+    @Column(length = 255)
+    private String thumbnailUrl;
+
+    @Column(nullable = false)
+    private boolean archived;
+
+    @Builder
+    private Memory(
+            String title,
+            String summary,
+            String description,
+            LocalDate memoryDate,
+            String emotion,
+            String thumbnailUrl,
+            boolean archived
+    ) {
+        this.title = title;
+        this.summary = summary;
+        this.description = description;
+        this.memoryDate = memoryDate;
+        this.emotion = emotion;
+        this.thumbnailUrl = thumbnailUrl;
+        this.archived = archived;
+    }
+
+    public void update(
+            String title,
+            String summary,
+            String description,
+            LocalDate memoryDate,
+            String emotion,
+            String thumbnailUrl
+    ) {
+        this.title = title;
+        this.summary = summary;
+        this.description = description;
+        this.memoryDate = memoryDate;
+        this.emotion = emotion;
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public void archive() {
+        this.archived = true;
+    }
+
+    public void restore() {
+        this.archived = false;
+    }
 }
