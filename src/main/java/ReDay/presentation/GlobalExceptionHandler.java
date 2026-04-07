@@ -1,9 +1,10 @@
 package ReDay.presentation;
 
 import ReDay.application.exception.BusinessException;
-import ReDay.application.exception.ErrorCode;
 import ReDay.common.response.CommonResponse;
+import ReDay.common.response.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,10 +20,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<CommonResponse<Void>> handleBusinessException(BusinessException e) {
         log.warn("BusinessException: {}", e.getMessage());
-        ErrorCode errorCode = e.getErrorCode();
+
         return ResponseEntity
-                .status(errorCode.getStatus())
-                .body(CommonResponse.fail(errorCode.getMessage()));
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CommonResponse.fail(e.getCode(), e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -30,17 +31,23 @@ public class GlobalExceptionHandler {
         String message = e.getBindingResult().getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining(", "));
+
         log.warn("ValidationException: {}", message);
+
         return ResponseEntity
-                .status(ErrorCode.BAD_REQUEST.getStatus())
-                .body(CommonResponse.fail(message));
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CommonResponse.fail(HttpStatus.BAD_REQUEST.value(), message));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CommonResponse<Void>> handleException(Exception e) {
         log.error("UnhandledException: ", e);
+
         return ResponseEntity
-                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
-                .body(CommonResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR.getMessage()));
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(CommonResponse.fail(
+                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        ResponseMessage.MEMORY_ANALYSIS_FAILED.getMessage()
+                ));
     }
 }

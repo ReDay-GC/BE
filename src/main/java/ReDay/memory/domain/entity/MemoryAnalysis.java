@@ -1,7 +1,6 @@
-
 package ReDay.memory.domain.entity;
 
-import ReDay.domain.entity.BaseEntity;
+import ReDay.domain.entity.BaseTimeEntity;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -23,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "memory_analysis")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemoryAnalysis extends BaseEntity {
+public class MemoryAnalysis extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +35,10 @@ public class MemoryAnalysis extends BaseEntity {
     private String emotionResult;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "memory_analysis_keywords", joinColumns = @JoinColumn(name = "analysis_id"))
+    @CollectionTable(
+            name = "memory_analysis_keywords",
+            joinColumns = @JoinColumn(name = "analysis_id")
+    )
     @Column(name = "keyword")
     private List<String> keywords;
 

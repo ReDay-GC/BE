@@ -1,6 +1,6 @@
 package ReDay.memory.domain.entity;
 
-import ReDay.domain.entity.BaseEntity;
+import ReDay.domain.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "memory")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Memory extends BaseEntity {
+public class Memory extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
