@@ -25,56 +25,50 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x test --no-daemon
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build and push Docker image to ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: reday
-          IMAGE_TAG: ${{ github.sha }}
+      - name: Build and push Docker image to Docker Hub
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
-          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
+          docker build -t jinsung0927/reday:latest .
+          docker push jinsung0927/reday:latest
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          envs: IMAGE,ECR_REGISTRY,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY
+          envs: DB_HOST,DB_NAME,DB_USERNAME,DB_PASSWORD,S3_BUCKET_NAME,JWT_SECRET,OPENAI_API_KEY
           script: |
-            export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-            export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
-            docker pull $IMAGE
+            docker pull jinsung0927/reday:latest
             docker stop reday || true
             docker rm reday || true
             docker run -d \
               --name reday \
               --restart unless-stopped \
               -p 8080:8080 \
-              -e "DB_HOST=${{ secrets.DB_HOST }}" \
-              -e "DB_NAME=${{ secrets.DB_NAME }}" \
-              -e "DB_USERNAME=${{ secrets.DB_USERNAME }}" \
-              -e "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" \
-              -e "S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" \
-              -e "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY_ID }}" \
-              -e "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
-              -e "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
-              -e "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" \
-              "$IMAGE"
+              -e "SPRING_PROFILES_ACTIVE=dev" \
+              -e "SWAGGER_SERVER_URL=http://43.201.21.138:8080" \
+              -e "DB_HOST=$DB_HOST" \
+              -e "DB_NAME=$DB_NAME" \
+              -e "DB_USERNAME=$DB_USERNAME" \
+              -e "DB_PASSWORD=$DB_PASSWORD" \
+              -e "S3_BUCKET_NAME=$S3_BUCKET_NAME" \
+              -e "JWT_SECRET=$JWT_SECRET" \
+              -e "OPENAI_API_KEY=$OPENAI_API_KEY" \
+              jinsung0927/reday:latest
 
       - name: Health check
         uses: appleboy/ssh-action@v1
@@ -83,13 +77,13 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            for i in {1..10}; do
+            for i in {1..30}; do
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health)
               if [ "$STATUS" = "200" ]; then
                 echo "Health check passed"
                 exit 0
               fi
-              echo "Waiting for app to start... ($i/10)"
+              echo "Waiting for app to start... ($i/30)"
               sleep 10
             done
             echo "Health check failed"
