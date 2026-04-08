@@ -7,22 +7,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ResponseMessage {
 
-    SUCCESS("요청이 성공적으로 처리되었습니다."),
+    SUCCESS(0, "요청이 성공적으로 처리되었습니다."),
 
     // Auth
-    LOGIN_SUCCESS("로그인에 성공했습니다."),
-    LOGOUT_SUCCESS("로그아웃에 성공했습니다."),
-    SIGNUP_SUCCESS("회원가입에 성공했습니다."),
+    LOGIN_SUCCESS(100, "로그인에 성공했습니다."),
+    LOGOUT_SUCCESS(101, "로그아웃에 성공했습니다."),
+    SIGNUP_SUCCESS(102, "회원가입에 성공했습니다."),
 
     // Record
-    RECORD_CREATED("기록이 저장되었습니다."),
-    RECORD_DELETED("기록이 삭제되었습니다."),
-    RECORD_FETCHED("기록을 조회했습니다."),
+    RECORD_CREATED(200, "기록이 저장되었습니다."),
+    RECORD_DELETED(201, "기록이 삭제되었습니다."),
+    RECORD_FETCHED(202, "기록을 조회했습니다."),
 
     // Memory
-    MEMORY_GENERATED("기억이 생성되었습니다."),
-    MEMORY_FETCHED("기억을 조회했습니다."),
-    MEMORY_DELETED("기억이 삭제되었습니다.");
+    MEMORY_GENERATED(300, "기억이 생성되었습니다."),
+    MEMORY_FETCHED(301, "기억을 조회했습니다."),
+    MEMORY_DELETED(302, "기억이 삭제되었습니다."),
 
+    MEMORY_DETAIL_GET_SUCCESS(303, "기억 상세 조회 성공"),
+    MEMORY_ANALYSIS_SUCCESS(304, "기억 분석 생성 성공"),
+    MEMORY_ANALYSIS_GET_SUCCESS(305, "기억 분석 조회 성공"),
+
+    MEMORY_NOT_FOUND(400, "기억을 찾을 수 없습니다."),
+    MEMORY_ACCESS_DENIED(401, "해당 기억에 접근할 권한이 없습니다."),
+    MEMORY_ANALYSIS_FAILED(500, "기억 분석에 실패했습니다.");
+
+    private final int code;
     private final String message;
 }

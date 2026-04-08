@@ -11,22 +11,38 @@ import lombok.RequiredArgsConstructor;
 public class CommonResponse<T> {
 
     private final boolean success;
+    private final int code;
     private final String message;
     private final T data;
 
-    public static <T> CommonResponse<T> ok(T data) {
-        return new CommonResponse<>(true, ResponseMessage.SUCCESS.getMessage(), data);
+    public static <T> CommonResponse<T> success(T data) {
+        return new CommonResponse<>(
+                true,
+                ResponseMessage.SUCCESS.getCode(),
+                ResponseMessage.SUCCESS.getMessage(),
+                data
+        );
     }
 
-    public static <T> CommonResponse<T> ok(ResponseMessage responseMessage, T data) {
-        return new CommonResponse<>(true, responseMessage.getMessage(), data);
+    public static <T> CommonResponse<T> success(ResponseMessage responseMessage, T data) {
+        return new CommonResponse<>(
+                true,
+                responseMessage.getCode(),
+                responseMessage.getMessage(),
+                data
+        );
     }
 
-    public static CommonResponse<Void> ok() {
-        return new CommonResponse<>(true, ResponseMessage.SUCCESS.getMessage(), null);
+    public static CommonResponse<Void> success() {
+        return new CommonResponse<>(
+                true,
+                ResponseMessage.SUCCESS.getCode(),
+                ResponseMessage.SUCCESS.getMessage(),
+                null
+        );
     }
 
-    public static CommonResponse<Void> fail(String message) {
-        return new CommonResponse<>(false, message, null);
+    public static CommonResponse<Void> fail(int code, String message) {
+        return new CommonResponse<>(false, code, message, null);
     }
 }
