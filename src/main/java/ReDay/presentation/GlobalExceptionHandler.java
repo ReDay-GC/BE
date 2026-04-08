@@ -1,8 +1,8 @@
 package ReDay.presentation;
 
 import ReDay.application.exception.BusinessException;
+import ReDay.application.exception.ErrorCode;
 import ReDay.common.response.CommonResponse;
-import ReDay.common.response.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(CommonResponse.fail(
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                        ResponseMessage.MEMORY_ANALYSIS_FAILED.getMessage()
+                        ErrorCode.INTERNAL_SERVER_ERROR.getMessage()
                 ));
     }
 }
