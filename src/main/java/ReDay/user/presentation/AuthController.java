@@ -9,11 +9,14 @@ import ReDay.user.application.dto.response.SignUpResponse;
 import ReDay.user.application.usecase.LoginUseCase;
 import ReDay.user.application.usecase.LogoutUseCase;
 import ReDay.user.application.usecase.SignUpUseCase;
+import ReDay.user.application.usecase.WithdrawUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -30,6 +33,7 @@ public class AuthController {
     private final SignUpUseCase signUpUseCase;
     private final LoginUseCase loginUseCase;
     private final LogoutUseCase logoutUseCase;
+    private final WithdrawUseCase withdrawUseCase;
 
     @Operation(summary = "회원가입")
     @PostMapping("/signup")
@@ -52,5 +56,14 @@ public class AuthController {
     public void logout(@RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring("Bearer ".length());
         logoutUseCase.execute(token);
+    }
+
+    @Operation(summary = "회원탈퇴")
+    @DeleteMapping("/withdraw")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void withdraw(@AuthenticationPrincipal Long userId,
+                         @RequestHeader("Authorization") String bearerToken) {
+        String token = bearerToken.substring("Bearer ".length());
+        withdrawUseCase.execute(userId, token);
     }
 }
