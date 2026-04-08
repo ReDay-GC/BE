@@ -2,8 +2,11 @@ package ReDay.user.presentation;
 
 import ReDay.common.response.CommonResponse;
 import ReDay.common.response.ResponseMessage;
+import ReDay.user.application.dto.request.LoginRequest;
 import ReDay.user.application.dto.request.SignUpRequest;
+import ReDay.user.application.dto.response.LoginResponse;
 import ReDay.user.application.dto.response.SignUpResponse;
+import ReDay.user.application.usecase.LoginUseCase;
 import ReDay.user.application.usecase.SignUpUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final SignUpUseCase signUpUseCase;
+    private final LoginUseCase loginUseCase;
 
     @Operation(summary = "회원가입")
     @PostMapping("/signup")
@@ -30,5 +34,12 @@ public class AuthController {
     public CommonResponse<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest request) {
         SignUpResponse response = signUpUseCase.execute(request);
         return CommonResponse.success(ResponseMessage.SIGNUP_SUCCESS, response);
+    }
+
+    @Operation(summary = "로그인")
+    @PostMapping("/login")
+    public CommonResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        LoginResponse response = loginUseCase.execute(request);
+        return CommonResponse.success(ResponseMessage.LOGIN_SUCCESS, response);
     }
 }
