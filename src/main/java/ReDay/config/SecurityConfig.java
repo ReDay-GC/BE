@@ -1,7 +1,6 @@
 package ReDay.config;
 
 import ReDay.config.jwt.JwtFilter;
-import ReDay.config.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtProvider jwtProvider;
+    private final JwtFilter jwtFilter;
 
     private static final String[] PUBLIC_URLS = {
             "/api/auth/**",
@@ -35,7 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_URLS).permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(new JwtFilter(jwtProvider),
+                .addFilterBefore(jwtFilter,
                         UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

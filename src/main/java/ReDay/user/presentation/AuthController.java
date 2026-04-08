@@ -7,6 +7,7 @@ import ReDay.user.application.dto.request.SignUpRequest;
 import ReDay.user.application.dto.response.LoginResponse;
 import ReDay.user.application.dto.response.SignUpResponse;
 import ReDay.user.application.usecase.LoginUseCase;
+import ReDay.user.application.usecase.LogoutUseCase;
 import ReDay.user.application.usecase.SignUpUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +29,7 @@ public class AuthController {
 
     private final SignUpUseCase signUpUseCase;
     private final LoginUseCase loginUseCase;
+    private final LogoutUseCase logoutUseCase;
 
     @Operation(summary = "회원가입")
     @PostMapping("/signup")
@@ -41,5 +44,13 @@ public class AuthController {
     public CommonResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = loginUseCase.execute(request);
         return CommonResponse.success(ResponseMessage.LOGIN_SUCCESS, response);
+    }
+
+    @Operation(summary = "로그아웃")
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(@RequestHeader("Authorization") String bearerToken) {
+        String token = bearerToken.substring("Bearer ".length());
+        logoutUseCase.execute(token);
     }
 }
