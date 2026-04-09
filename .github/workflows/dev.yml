@@ -39,39 +39,36 @@ jobs:
           docker build -t jinsung0927/reday:latest .
           docker push jinsung0927/reday:latest
 
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1
-        env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Copy docker-compose to EC2
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          envs: DB_HOST,DB_NAME,DB_USERNAME,DB_PASSWORD,S3_BUCKET_NAME,JWT_SECRET,OPENAI_API_KEY
+          source: "docker-compose.yml"
+          target: "/home/ubuntu"
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            cat > /home/ubuntu/.env << 'ENVEOF'
+            SPRING_PROFILES_ACTIVE=dev
+            SWAGGER_SERVER_URL=http://${{ secrets.EC2_HOST }}:8080
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_NAME=${{ secrets.DB_NAME }}
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            ENVEOF
             docker pull jinsung0927/reday:latest
-            docker stop reday || true
-            docker rm reday || true
-            docker run -d \
-              --name reday \
-              --restart unless-stopped \
-              -p 8080:8080 \
-              -e "SPRING_PROFILES_ACTIVE=dev" \
-              -e "SWAGGER_SERVER_URL=http://${{ secrets.EC2_HOST }}:8080" \
-              -e "DB_HOST=$DB_HOST" \
-              -e "DB_NAME=$DB_NAME" \
-              -e "DB_USERNAME=$DB_USERNAME" \
-              -e "DB_PASSWORD=$DB_PASSWORD" \
-              -e "S3_BUCKET_NAME=$S3_BUCKET_NAME" \
-              -e "JWT_SECRET=$JWT_SECRET" \
-              -e "OPENAI_API_KEY=$OPENAI_API_KEY" \
-              jinsung0927/reday:latest
+            cd /home/ubuntu
+            docker compose up -d spring-boot
 
       - name: Health check
         uses: appleboy/ssh-action@v1
