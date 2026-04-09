@@ -22,7 +22,7 @@ public class MemoryGetService {
         return memoryRepository.findAllByOrderByMemoryDateDesc();
     }
 
-    public List<Memory> getMemoryByEmotion(String emotion) {
-        return memoryRepository.findAllByEmotionOrderByMemoryDateDesc(emotion);
+    public List<Memory> searchMemoryByKeyword(String keyword) {
+        return memoryRepository.findAllByTitleContainingIgnoreCaseOrderByMemoryDateDesc(keyword);
     }
 }
