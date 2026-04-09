@@ -15,6 +15,7 @@ import ReDay.memory.application.usecase.GetMemoryByDateUseCase;
 import ReDay.memory.application.usecase.GetMemoryCalendarUseCase;
 import ReDay.memory.application.usecase.GetMemoryDetailUseCase;
 import ReDay.memory.application.usecase.GetMemoryListUseCase;
+import ReDay.memory.application.usecase.SearchMemoryByLocationUseCase;
 import ReDay.memory.application.usecase.SearchMemoryByTagUseCase;
 import ReDay.memory.application.usecase.SearchMemoryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,6 +45,7 @@ public class MemoryController {
     private final GetMemoryByDateUseCase getMemoryByDateUseCase;
     private final GetAllTagsUseCase getAllTagsUseCase;
     private final SearchMemoryByTagUseCase searchMemoryByTagUseCase;
+    private final SearchMemoryByLocationUseCase searchMemoryByLocationUseCase;
 
     @Operation(summary = "기억 상세 조회", description = "기억 ID를 기준으로 기억 상세 정보를 조회합니다.")
     @GetMapping("/{memoryId}")
@@ -137,6 +139,19 @@ public class MemoryController {
             @RequestParam String tagName
     ) {
         List<MemorySearchResponse> response = searchMemoryByTagUseCase.execute(tagName);
+
+        return CommonResponse.success(
+                ResponseMessage.MEMORY_FETCHED,
+                response
+        );
+    }
+
+    @Operation(summary = "장소별 기억 검색", description = "특정 장소명으로 기억 목록을 조회합니다.")
+    @GetMapping("/search/location")
+    public CommonResponse<List<MemorySearchResponse>> searchMemoryByLocation(
+            @RequestParam String location
+    ) {
+        List<MemorySearchResponse> response = searchMemoryByLocationUseCase.execute(location);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,
