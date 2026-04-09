@@ -13,4 +13,6 @@ services:
     container_name: reday-ai
     ports:
       - "8000:8000"
+    env_file:
+      - /home/ubuntu/AI/.env
     restart: always
