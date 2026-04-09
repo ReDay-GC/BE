@@ -65,9 +65,9 @@ public class AnalysisAiService {
 
             String insight = contentNode.path("insight").asText();
             List<PersonData> people = objectMapper.convertValue(
-                    contentNode.path("topPeople"), new TypeReference<>() {});
+                    contentNode.path("topPeople"), new TypeReference<List<PersonData>>() {});
             List<ActivityData> activities = objectMapper.convertValue(
-                    contentNode.path("topActivities"), new TypeReference<>() {});
+                    contentNode.path("topActivities"), new TypeReference<List<ActivityData>>() {});
 
             return new AiInsightResult(insight, people, activities);
         } catch (Exception e) {
