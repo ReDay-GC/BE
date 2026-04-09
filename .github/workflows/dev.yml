@@ -67,6 +67,8 @@ jobs:
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             ENVEOF
             docker pull jinsung0927/reday:latest
+            docker stop reday || true
+            docker rm reday || true
             cd /home/ubuntu
             docker-compose up -d spring-boot
 
