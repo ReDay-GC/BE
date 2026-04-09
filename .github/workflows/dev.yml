@@ -90,4 +90,6 @@ jobs:
               sleep 10
             done
             echo "Health check failed"
+            echo "=== Docker logs ==="
+            docker logs reday --tail 60
             exit 1
