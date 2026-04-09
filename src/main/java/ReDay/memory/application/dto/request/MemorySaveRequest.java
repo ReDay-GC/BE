@@ -8,6 +8,7 @@ public record MemorySaveRequest(
         String description,
         LocalDate memoryDate,
         String emotion,
-        String thumbnailUrl
+        String thumbnailUrl,
+        String location
 ) {
 }

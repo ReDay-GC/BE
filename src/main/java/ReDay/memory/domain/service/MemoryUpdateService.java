@@ -25,6 +25,7 @@ public class MemoryUpdateService {
         var memoryDate = request.memoryDate() != null ? request.memoryDate() : memory.getMemoryDate();
         String emotion = request.emotion() != null ? request.emotion() : memory.getEmotion();
         String thumbnailUrl = request.thumbnailUrl() != null ? request.thumbnailUrl() : memory.getThumbnailUrl();
+        String location = request.location() != null ? request.location() : memory.getLocation();
 
         memory.update(
                 title,
@@ -32,7 +33,8 @@ public class MemoryUpdateService {
                 description,
                 memoryDate,
                 emotion,
-                thumbnailUrl
+                thumbnailUrl,
+                location
         );
 
         return memory;

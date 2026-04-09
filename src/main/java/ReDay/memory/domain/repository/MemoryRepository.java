@@ -14,4 +14,8 @@ public interface MemoryRepository extends JpaRepository<Memory, Long> {
     List<Memory> findAllByMemoryDate(LocalDate date);
 
     List<Memory> findAllByMemoryDateBetween(LocalDate startDate, LocalDate endDate);
+
+    List<Memory> findAllByLocationIsNotNull();
+
+    List<Memory> findAllByLocation(String location);
 }

@@ -22,6 +22,7 @@ public class MemorySaveService {
                 .memoryDate(request.memoryDate())
                 .emotion(request.emotion())
                 .thumbnailUrl(request.thumbnailUrl())
+                .location(request.location())
                 .archived(false)
                 .build();
 
