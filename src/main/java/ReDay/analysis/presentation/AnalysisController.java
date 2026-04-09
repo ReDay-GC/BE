@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Analysis", description = "기억 분석 API")
+@Tag(name = "Analysis", description = "월간 통계 분석 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/analysis")
