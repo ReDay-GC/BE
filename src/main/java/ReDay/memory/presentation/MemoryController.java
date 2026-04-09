@@ -7,12 +7,16 @@ import ReDay.memory.application.dto.request.MemorySearchRequest;
 import ReDay.memory.application.dto.response.MemoryDetailResponse;
 import ReDay.memory.application.dto.response.MemoryListResponse;
 import ReDay.memory.application.dto.response.MemorySearchResponse;
+import ReDay.memory.application.dto.response.MemoryCalendarResponse;
 import ReDay.memory.application.usecase.CreateMemoryUseCase;
+import ReDay.memory.application.usecase.GetMemoryByDateUseCase;
+import ReDay.memory.application.usecase.GetMemoryCalendarUseCase;
 import ReDay.memory.application.usecase.GetMemoryDetailUseCase;
 import ReDay.memory.application.usecase.GetMemoryListUseCase;
 import ReDay.memory.application.usecase.SearchMemoryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +37,8 @@ public class MemoryController {
     private final CreateMemoryUseCase createMemoryUseCase;
     private final GetMemoryListUseCase getMemoryListUseCase;
     private final SearchMemoryUseCase searchMemoryUseCase;
+    private final GetMemoryCalendarUseCase getMemoryCalendarUseCase;
+    private final GetMemoryByDateUseCase getMemoryByDateUseCase;
 
     @Operation(summary = "기억 상세 조회", description = "기억 ID를 기준으로 기억 상세 정보를 조회합니다.")
     @GetMapping("/{memoryId}")
@@ -58,8 +64,8 @@ public class MemoryController {
 
     @Operation(summary = "기억 목록 조회", description = "전체 기억 목록을 조회합니다.")
     @GetMapping
-    public CommonResponse<java.util.List<MemoryListResponse>> getMemoryList() {
-        java.util.List<MemoryListResponse> response = getMemoryListUseCase.execute();
+    public CommonResponse<List<MemoryListResponse>> getMemoryList() {
+        List<MemoryListResponse> response = getMemoryListUseCase.execute();
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,
@@ -75,6 +81,33 @@ public class MemoryController {
         List<MemorySearchResponse> response = searchMemoryUseCase.execute(
                 new MemorySearchRequest(keyword)
         );
+
+        return CommonResponse.success(
+                ResponseMessage.MEMORY_FETCHED,
+                response
+        );
+    }
+
+    @Operation(summary = "캘린더 조회", description = "특정 연월에 기억이 있는 날짜 목록을 조회합니다.")
+    @GetMapping("/calendar")
+    public CommonResponse<MemoryCalendarResponse> getMemoryCalendar(
+            @RequestParam int year,
+            @RequestParam int month
+    ) {
+        MemoryCalendarResponse response = getMemoryCalendarUseCase.execute(year, month);
+
+        return CommonResponse.success(
+                ResponseMessage.MEMORY_FETCHED,
+                response
+        );
+    }
+
+    @Operation(summary = "날짜별 기억 조회", description = "특정 날짜의 기억 목록을 조회합니다.")
+    @GetMapping("/date")
+    public CommonResponse<List<MemoryListResponse>> getMemoryByDate(
+            @RequestParam LocalDate date
+    ) {
+        List<MemoryListResponse> response = getMemoryByDateUseCase.execute(date);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,

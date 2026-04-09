@@ -3,6 +3,8 @@ package ReDay.memory.domain.service;
 import ReDay.memory.domain.entity.Memory;
 import ReDay.memory.domain.repository.MemoryRepository;
 import ReDay.memory.application.exception.MemoryNotFoundException;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,5 +26,22 @@ public class MemoryGetService {
 
     public List<Memory> searchMemoryByKeyword(String keyword) {
         return memoryRepository.findAllByTitleContainingIgnoreCaseOrderByMemoryDateDesc(keyword);
+    }
+
+    public List<Memory> getMemoriesByDate(LocalDate date) {
+        return memoryRepository.findAllByMemoryDate(date);
+    }
+
+    public List<LocalDate> getMemoryDatesByYearMonth(int year, int month) {
+        YearMonth yearMonth = YearMonth.of(year, month);
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        return memoryRepository.findAllByMemoryDateBetween(startDate, endDate)
+                .stream()
+                .map(Memory::getMemoryDate)
+                .distinct()
+                .sorted()
+                .toList();
     }
 }
