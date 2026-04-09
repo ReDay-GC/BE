@@ -14,4 +14,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker logs reday --tail 100 2>&1
+            echo "=== AnalysisAiService 관련 로그 ==="
+            docker logs reday 2>&1 | grep -A 10 "AnalysisAiService"
+            echo "=== 최근 ERROR/WARN 로그 ==="
+            docker logs reday 2>&1 | grep -E "ERROR|WARN" | tail -20
