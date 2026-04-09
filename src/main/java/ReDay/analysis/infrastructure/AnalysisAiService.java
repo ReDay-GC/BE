@@ -8,10 +8,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AnalysisAiService {
@@ -56,12 +58,14 @@ public class AnalysisAiService {
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {
+            log.error("[AnalysisAiService] OpenAI API 호출 실패: {}", e.getMessage(), e);
             throw new BusinessException(ErrorCode.INSIGHT_GENERATION_FAILED);
         }
     }
 
     private AiInsightResult parseResponse(String responseBody) {
         try {
+            log.debug("[AnalysisAiService] OpenAI 응답: {}", responseBody);
             JsonNode root = OBJECT_MAPPER.readTree(responseBody);
             String content = root.path("choices").get(0).path("message").path("content").asText();
             JsonNode contentNode = OBJECT_MAPPER.readTree(content);
@@ -74,6 +78,7 @@ public class AnalysisAiService {
 
             return new AiInsightResult(insight, people, activities);
         } catch (Exception e) {
+            log.error("[AnalysisAiService] 응답 파싱 실패: {}", e.getMessage(), e);
             throw new BusinessException(ErrorCode.INSIGHT_GENERATION_FAILED);
         }
     }
