@@ -29,6 +29,7 @@ public enum ResponseMessage {
     MEMORY_ANALYSIS_GET_SUCCESS(305, "기억 분석 조회 성공"),
 
     MEMORY_NOT_FOUND(400, "기억을 찾을 수 없습니다."),
+    RECORD_NOT_FOUND(401, "기록을 찾을 수 없습니다."),
     MEMORY_ACCESS_DENIED(401, "해당 기억에 접근할 권한이 없습니다."),
     MEMORY_ANALYSIS_FAILED(500, "기억 분석에 실패했습니다."),
 

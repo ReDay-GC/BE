@@ -4,6 +4,7 @@ import ReDay.common.response.CommonResponse;
 import ReDay.common.response.ResponseMessage;
 import ReDay.record.application.dto.request.TextRecordRequest;
 import ReDay.record.application.dto.response.RecordSaveResponse;
+import ReDay.record.application.usecase.DeleteRecordUseCase;
 import ReDay.record.application.usecase.SavePhotoRecordUseCase;
 import ReDay.record.application.usecase.SaveTextRecordUseCase;
 import ReDay.record.application.usecase.SaveVoiceRecordUseCase;
@@ -17,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,9 +34,18 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/records")
 public class RecordController {
 
+    private final DeleteRecordUseCase deleteRecordUseCase;
     private final SaveTextRecordUseCase saveTextRecordUseCase;
     private final SavePhotoRecordUseCase savePhotoRecordUseCase;
     private final SaveVoiceRecordUseCase saveVoiceRecordUseCase;
+
+    @Operation(summary = "기록 삭제")
+    @DeleteMapping("/{recordId}")
+    public CommonResponse<Void> deleteRecord(@PathVariable Long recordId) {
+        deleteRecordUseCase.execute(recordId);
+
+        return CommonResponse.success(ResponseMessage.RECORD_DELETED, null);
+    }
 
     @Operation(summary = "텍스트 기록 저장")
     @PostMapping("/text")

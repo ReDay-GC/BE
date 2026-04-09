@@ -9,6 +9,7 @@ import ReDay.memory.application.dto.response.MemoryListResponse;
 import ReDay.memory.application.dto.response.MemorySearchResponse;
 import ReDay.memory.application.dto.response.MemoryCalendarResponse;
 import ReDay.memory.application.dto.response.MemoryTagListResponse;
+import ReDay.memory.application.usecase.DeleteMemoryUseCase;
 import ReDay.memory.application.usecase.CreateMemoryUseCase;
 import ReDay.memory.application.usecase.GetAllTagsUseCase;
 import ReDay.memory.application.usecase.GetMemoryByDateUseCase;
@@ -23,6 +24,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/memories")
 public class MemoryController {
 
+    private final DeleteMemoryUseCase deleteMemoryUseCase;
     private final GetMemoryDetailUseCase getMemoryDetailUseCase;
     private final CreateMemoryUseCase createMemoryUseCase;
     private final GetMemoryListUseCase getMemoryListUseCase;
@@ -46,6 +49,14 @@ public class MemoryController {
     private final GetAllTagsUseCase getAllTagsUseCase;
     private final SearchMemoryByTagUseCase searchMemoryByTagUseCase;
     private final SearchMemoryByLocationUseCase searchMemoryByLocationUseCase;
+
+    @Operation(summary = "기억 삭제", description = "기억 ID를 기준으로 기억을 삭제합니다.")
+    @DeleteMapping("/{memoryId}")
+    public CommonResponse<Void> deleteMemory(@PathVariable Long memoryId) {
+        deleteMemoryUseCase.execute(memoryId);
+
+        return CommonResponse.success(ResponseMessage.MEMORY_DELETED, null);
+    }
 
     @Operation(summary = "기억 상세 조회", description = "기억 ID를 기준으로 기억 상세 정보를 조회합니다.")
     @GetMapping("/{memoryId}")
