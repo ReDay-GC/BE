@@ -34,7 +34,14 @@ public enum ResponseMessage {
     MEMORY_ANALYSIS_FAILED(500, "기억 분석에 실패했습니다."),
 
     // Analysis
-    ANALYSIS_FETCHED(600, "분석 조회 성공");
+    ANALYSIS_FETCHED(600, "분석 조회 성공"),
+
+    // Notification
+    NOTIFICATION_FETCHED(700, "알림 목록을 조회했습니다."),
+    NOTIFICATION_READ(701, "알림을 읽음 처리했습니다."),
+    NOTIFICATION_SETTING_FETCHED(702, "알림 설정을 조회했습니다."),
+    NOTIFICATION_SETTING_UPDATED(703, "알림 설정이 변경되었습니다."),
+    NOTIFICATION_NOT_FOUND(704, "알림을 찾을 수 없습니다.");
 
     private final int code;
     private final String message;
