@@ -6,19 +6,21 @@ import ReDay.memory.application.dto.request.MemorySaveRequest;
 import ReDay.memory.application.dto.request.MemorySearchRequest;
 import ReDay.memory.application.dto.response.MemoryDetailResponse;
 import ReDay.memory.application.dto.response.MemoryListResponse;
+import ReDay.memory.application.dto.response.MemorySearchResponse;
 import ReDay.memory.application.usecase.CreateMemoryUseCase;
 import ReDay.memory.application.usecase.GetMemoryDetailUseCase;
 import ReDay.memory.application.usecase.GetMemoryListUseCase;
 import ReDay.memory.application.usecase.SearchMemoryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Memory", description = "기억 관리 API")
@@ -65,24 +67,14 @@ public class MemoryController {
         );
     }
 
-    @Operation(summary = "기억 검색", description = "키워드, 감정, 날짜 범위 기준으로 기억을 검색합니다.")
+    @Operation(summary = "기억 검색", description = "키워드 기준으로 기억을 검색합니다.")
     @GetMapping("/search")
-    public CommonResponse<java.util.List<ReDay.memory.application.dto.response.MemorySearchResponse>> searchMemory(
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String emotion,
-            @RequestParam(required = false) java.time.LocalDate startDate,
-            @RequestParam(required = false) java.time.LocalDate endDate
+    public CommonResponse<List<MemorySearchResponse>> searchMemory(
+            @RequestParam String keyword
     ) {
-        ReDay.memory.application.dto.request.MemorySearchRequest request =
-                new ReDay.memory.application.dto.request.MemorySearchRequest(
-                        keyword,
-                        emotion,
-                        startDate,
-                        endDate
-                );
-
-        java.util.List<ReDay.memory.application.dto.response.MemorySearchResponse> response =
-                searchMemoryUseCase.execute(request);
+        List<MemorySearchResponse> response = searchMemoryUseCase.execute(
+                new MemorySearchRequest(keyword)
+        );
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,
