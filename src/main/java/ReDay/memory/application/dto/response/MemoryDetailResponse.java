@@ -11,6 +11,7 @@ public record MemoryDetailResponse(
         LocalDate memoryDate,
         String emotion,
         String thumbnailUrl,
+        String location,
         boolean archived,
         List<MemoryTagResponse> tags,
         List<MemoryRecordResponse> records,

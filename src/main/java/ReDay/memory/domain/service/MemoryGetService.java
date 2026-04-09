@@ -32,6 +32,14 @@ public class MemoryGetService {
         return memoryRepository.findAllByMemoryDate(date);
     }
 
+    public List<Memory> getMemoriesWithLocation() {
+        return memoryRepository.findAllByLocationIsNotNull();
+    }
+
+    public List<Memory> getMemoriesByLocation(String location) {
+        return memoryRepository.findAllByLocation(location);
+    }
+
     public List<LocalDate> getMemoryDatesByYearMonth(int year, int month) {
         YearMonth yearMonth = YearMonth.of(year, month);
         LocalDate startDate = yearMonth.atDay(1);

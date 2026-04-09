@@ -8,6 +8,7 @@ public record MemoryUpdateRequest(
         String description,
         LocalDate memoryDate,
         String emotion,
-        String thumbnailUrl
+        String thumbnailUrl,
+        String location
 ) {
 }

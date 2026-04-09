@@ -26,6 +26,7 @@ public class MemoryMapper {
                 memory.getMemoryDate(),
                 memory.getEmotion(),
                 memory.getThumbnailUrl(),
+                memory.getLocation(),
                 memory.isArchived(),
                 List.of(),
                 List.of(),
@@ -40,7 +41,8 @@ public class MemoryMapper {
                 memory.getSummary(),
                 memory.getMemoryDate(),
                 memory.getEmotion(),
-                memory.getThumbnailUrl()
+                memory.getThumbnailUrl(),
+                memory.getLocation()
         );
     }
 

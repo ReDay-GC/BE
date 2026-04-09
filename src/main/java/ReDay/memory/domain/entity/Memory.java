@@ -41,6 +41,9 @@ public class Memory extends BaseTimeEntity {
     @Column(length = 255)
     private String thumbnailUrl;
 
+    @Column(length = 255)
+    private String location;
+
     @Column(nullable = false)
     private boolean archived;
 
@@ -52,6 +55,7 @@ public class Memory extends BaseTimeEntity {
             LocalDate memoryDate,
             String emotion,
             String thumbnailUrl,
+            String location,
             boolean archived
     ) {
         this.title = title;
@@ -60,6 +64,7 @@ public class Memory extends BaseTimeEntity {
         this.memoryDate = memoryDate;
         this.emotion = emotion;
         this.thumbnailUrl = thumbnailUrl;
+        this.location = location;
         this.archived = archived;
     }
 
@@ -69,7 +74,8 @@ public class Memory extends BaseTimeEntity {
             String description,
             LocalDate memoryDate,
             String emotion,
-            String thumbnailUrl
+            String thumbnailUrl,
+            String location
     ) {
         this.title = title;
         this.summary = summary;
@@ -77,6 +83,7 @@ public class Memory extends BaseTimeEntity {
         this.memoryDate = memoryDate;
         this.emotion = emotion;
         this.thumbnailUrl = thumbnailUrl;
+        this.location = location;
     }
 
     public void archive() {
