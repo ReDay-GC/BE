@@ -8,6 +8,7 @@ public record MemorySearchResponse(
         String summary,
         LocalDate memoryDate,
         String emotion,
-        String thumbnailUrl
+        String thumbnailUrl,
+        String location
 ) {
 }

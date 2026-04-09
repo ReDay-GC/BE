@@ -8,11 +8,14 @@ import ReDay.memory.application.dto.response.MemoryDetailResponse;
 import ReDay.memory.application.dto.response.MemoryListResponse;
 import ReDay.memory.application.dto.response.MemorySearchResponse;
 import ReDay.memory.application.dto.response.MemoryCalendarResponse;
+import ReDay.memory.application.dto.response.MemoryTagListResponse;
 import ReDay.memory.application.usecase.CreateMemoryUseCase;
+import ReDay.memory.application.usecase.GetAllTagsUseCase;
 import ReDay.memory.application.usecase.GetMemoryByDateUseCase;
 import ReDay.memory.application.usecase.GetMemoryCalendarUseCase;
 import ReDay.memory.application.usecase.GetMemoryDetailUseCase;
 import ReDay.memory.application.usecase.GetMemoryListUseCase;
+import ReDay.memory.application.usecase.SearchMemoryByTagUseCase;
 import ReDay.memory.application.usecase.SearchMemoryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,6 +42,8 @@ public class MemoryController {
     private final SearchMemoryUseCase searchMemoryUseCase;
     private final GetMemoryCalendarUseCase getMemoryCalendarUseCase;
     private final GetMemoryByDateUseCase getMemoryByDateUseCase;
+    private final GetAllTagsUseCase getAllTagsUseCase;
+    private final SearchMemoryByTagUseCase searchMemoryByTagUseCase;
 
     @Operation(summary = "기억 상세 조회", description = "기억 ID를 기준으로 기억 상세 정보를 조회합니다.")
     @GetMapping("/{memoryId}")
@@ -108,6 +113,30 @@ public class MemoryController {
             @RequestParam LocalDate date
     ) {
         List<MemoryListResponse> response = getMemoryByDateUseCase.execute(date);
+
+        return CommonResponse.success(
+                ResponseMessage.MEMORY_FETCHED,
+                response
+        );
+    }
+
+    @Operation(summary = "전체 태그 목록 조회", description = "등록된 모든 태그 목록을 조회합니다.")
+    @GetMapping("/tags")
+    public CommonResponse<MemoryTagListResponse> getAllTags() {
+        MemoryTagListResponse response = getAllTagsUseCase.execute();
+
+        return CommonResponse.success(
+                ResponseMessage.MEMORY_FETCHED,
+                response
+        );
+    }
+
+    @Operation(summary = "태그별 기억 검색", description = "특정 태그가 포함된 기억 목록을 조회합니다.")
+    @GetMapping("/search/tag")
+    public CommonResponse<List<MemorySearchResponse>> searchMemoryByTag(
+            @RequestParam String tagName
+    ) {
+        List<MemorySearchResponse> response = searchMemoryByTagUseCase.execute(tagName);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,
