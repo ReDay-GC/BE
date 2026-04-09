@@ -37,7 +37,10 @@ public enum ErrorCode {
 
     // AI
     AI_REQUEST_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "AI 요청 처리 중 오류가 발생했습니다."),
-    STT_REQUEST_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "음성 변환 처리 중 오류가 발생했습니다.");
+    STT_REQUEST_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "음성 변환 처리 중 오류가 발생했습니다."),
+
+    // Analysis
+    INSIGHT_GENERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "인사이트 생성에 실패했습니다.");
 
     private final HttpStatus status;
     private final String message;
