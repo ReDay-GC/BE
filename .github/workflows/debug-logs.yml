@@ -1,0 +1,17 @@
+name: Debug - Docker Logs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-logs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Docker logs
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker logs reday --tail 100 2>&1
