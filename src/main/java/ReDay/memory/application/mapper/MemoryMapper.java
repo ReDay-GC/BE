@@ -53,7 +53,8 @@ public class MemoryMapper {
                 memory.getSummary(),
                 memory.getMemoryDate(),
                 memory.getEmotion(),
-                memory.getThumbnailUrl()
+                memory.getThumbnailUrl(),
+                memory.getLocation()
         );
     }
 }
