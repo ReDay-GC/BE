@@ -1,0 +1,16 @@
+services:
+  spring-boot:
+    image: jinsung0927/reday:latest
+    container_name: reday
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  fastapi:
+    image: reday-ai
+    container_name: reday-ai
+    ports:
+      - "8000:8000"
+    restart: always
