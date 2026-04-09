@@ -15,8 +15,9 @@ import org.springframework.web.client.RestClient;
 @RequiredArgsConstructor
 public class AnalysisAiService {
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     private final RestClient openAIRestClient;
-    private final ObjectMapper objectMapper;
 
     private static final String MODEL = "gpt-4o-mini";
     private static final String SYSTEM_PROMPT = """
@@ -59,14 +60,14 @@ public class AnalysisAiService {
 
     private AiInsightResult parseResponse(String responseBody) {
         try {
-            JsonNode root = objectMapper.readTree(responseBody);
+            JsonNode root = OBJECT_MAPPER.readTree(responseBody);
             String content = root.path("choices").get(0).path("message").path("content").asText();
-            JsonNode contentNode = objectMapper.readTree(content);
+            JsonNode contentNode = OBJECT_MAPPER.readTree(content);
 
             String insight = contentNode.path("insight").asText();
-            List<PersonData> people = objectMapper.convertValue(
+            List<PersonData> people = OBJECT_MAPPER.convertValue(
                     contentNode.path("topPeople"), new TypeReference<List<PersonData>>() {});
-            List<ActivityData> activities = objectMapper.convertValue(
+            List<ActivityData> activities = OBJECT_MAPPER.convertValue(
                     contentNode.path("topActivities"), new TypeReference<List<ActivityData>>() {});
 
             return new AiInsightResult(insight, people, activities);
