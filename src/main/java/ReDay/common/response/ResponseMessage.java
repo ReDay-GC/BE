@@ -46,7 +46,13 @@ public enum ResponseMessage {
     // Notice
     NOTICE_LIST_FETCHED(800, "공지사항 목록을 조회했습니다."),
     NOTICE_DETAIL_FETCHED(801, "공지사항 상세를 조회했습니다."),
-    NOTICE_NOT_FOUND(802, "공지사항을 찾을 수 없습니다.");
+    NOTICE_NOT_FOUND(802, "공지사항을 찾을 수 없습니다."),
+
+    // Inquiry
+    INQUIRY_CREATED(900, "문의사항이 등록되었습니다."),
+    INQUIRY_LIST_FETCHED(901, "문의 목록을 조회했습니다."),
+    INQUIRY_DETAIL_FETCHED(902, "문의 상세를 조회했습니다."),
+    INQUIRY_NOT_FOUND(903, "문의사항을 찾을 수 없습니다.");
 
     private final int code;
     private final String message;
