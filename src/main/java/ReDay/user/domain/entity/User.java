@@ -45,4 +45,8 @@ public class User extends BaseTimeEntity {
         this.termsAgreed = termsAgreed;
         this.privacyAgreed = privacyAgreed;
     }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
 }
