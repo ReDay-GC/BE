@@ -52,7 +52,11 @@ public enum ResponseMessage {
     INQUIRY_CREATED(900, "문의사항이 등록되었습니다."),
     INQUIRY_LIST_FETCHED(901, "문의 목록을 조회했습니다."),
     INQUIRY_DETAIL_FETCHED(902, "문의 상세를 조회했습니다."),
-    INQUIRY_NOT_FOUND(903, "문의사항을 찾을 수 없습니다.");
+    INQUIRY_NOT_FOUND(903, "문의사항을 찾을 수 없습니다."),
+
+    // User (MyPage)
+    USER_PROFILE_FETCHED(1000, "사용자 정보를 조회했습니다."),
+    USER_PROFILE_UPDATED(1001, "프로필이 수정되었습니다.");
 
     private final int code;
     private final String message;
