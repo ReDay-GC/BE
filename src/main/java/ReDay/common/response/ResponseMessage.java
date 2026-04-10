@@ -56,7 +56,16 @@ public enum ResponseMessage {
 
     // User (MyPage)
     USER_PROFILE_FETCHED(1000, "사용자 정보를 조회했습니다."),
-    USER_PROFILE_UPDATED(1001, "프로필이 수정되었습니다.");
+    USER_PROFILE_UPDATED(1001, "프로필이 수정되었습니다."),
+
+    // Admin
+    ADMIN_LOGIN_SUCCESS(1100, "관리자 로그인에 성공했습니다."),
+    ADMIN_USER_STATS_FETCHED(1101, "사용자 통계를 조회했습니다."),
+    ADMIN_USER_LIST_FETCHED(1102, "회원 목록을 조회했습니다."),
+    ADMIN_USER_DETAIL_FETCHED(1103, "회원 상세를 조회했습니다."),
+    ADMIN_USER_MEMORIES_FETCHED(1104, "사용자 기억 목록을 조회했습니다."),
+    ADMIN_USER_UPDATED(1105, "회원 정보가 수정되었습니다."),
+    ADMIN_USER_DELETED(1106, "회원 계정이 삭제되었습니다.");
 
     private final int code;
     private final String message;
