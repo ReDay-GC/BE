@@ -13,8 +13,8 @@ public class AnalyzeMemoryUseCase {
 
     private final MemoryAnalysisService memoryAnalysisService;
 
-    public MemoryAnalysisResponse execute(Long memoryId) {
-        MemoryAnalysis analysis = memoryAnalysisService.analyze(memoryId);
+    public MemoryAnalysisResponse execute(Long userId, Long memoryId) {
+        MemoryAnalysis analysis = memoryAnalysisService.analyze(memoryId, userId);
 
         return MemoryAnalysisMapper.toResponse(analysis);
     }

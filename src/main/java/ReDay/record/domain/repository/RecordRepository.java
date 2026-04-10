@@ -14,4 +14,6 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     long countByUserId(Long userId);
 
     long countByUserIdAndRecordType(Long userId, String recordType);
+
+    long countByRecordType(String recordType);
 }
