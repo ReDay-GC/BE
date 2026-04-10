@@ -40,8 +40,24 @@ public class JwtProvider {
                 .compact();
     }
 
+    public String generateAdminToken(Long adminId) {
+        Date now = new Date();
+        return Jwts.builder()
+                .subject(String.valueOf(adminId))
+                .claim("role", "ADMIN")
+                .issuedAt(now)
+                .expiration(new Date(now.getTime() + expirationMs))
+                .signWith(secretKey)
+                .compact();
+    }
+
     public Long getUserId(String token) {
         return Long.parseLong(parseClaims(token).getSubject());
+    }
+
+    public boolean isAdminToken(String token) {
+        Claims claims = parseClaims(token);
+        return "ADMIN".equals(claims.get("role", String.class));
     }
 
     public boolean validateToken(String token) {

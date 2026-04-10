@@ -10,4 +10,8 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     List<Record> findByUserIdAndRecordDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
 
     List<Record> findByUserIdAndRecordDateGreaterThanEqual(Long userId, LocalDate startDate);
+
+    long countByUserId(Long userId);
+
+    long countByUserIdAndRecordType(Long userId, String recordType);
 }
