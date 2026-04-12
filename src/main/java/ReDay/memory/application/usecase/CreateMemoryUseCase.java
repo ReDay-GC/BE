@@ -17,6 +17,6 @@ public class CreateMemoryUseCase {
     public MemoryListResponse execute(MemorySaveRequest request) {
         Memory memory = memorySaveService.save(request);
 
-        return MemoryMapper.toMemoryListResponse(memory);
+        return MemoryMapper.toMemoryListResponse(memory, 0);
     }
 }

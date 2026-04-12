@@ -9,6 +9,7 @@ public record MemoryListResponse(
         LocalDate memoryDate,
         String emotion,
         String thumbnailUrl,
-        String location
+        String location,
+        long recordCount
 ) {
 }
