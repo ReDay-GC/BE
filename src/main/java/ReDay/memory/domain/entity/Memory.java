@@ -29,13 +29,13 @@ public class Memory extends BaseTimeEntity {
     @Column(nullable = false, length = 255)
     private String summary;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)
     private LocalDate memoryDate;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String emotion;
 
     @Column(length = 255)
