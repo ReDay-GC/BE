@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @RequiredArgsConstructor
 public class RecordGetService {
@@ -17,5 +18,10 @@ public class RecordGetService {
     @Transactional(readOnly = true)
     public List<Record> getByDate(Long userId, LocalDate date) {
         return recordRepository.findByUserIdAndRecordDate(userId, date);
+    }
+
+    @Transactional(readOnly = true)
+    public List<LocalDate> getRecordDatesByMonth(Long userId, int year, int month) {
+        return recordRepository.findDistinctRecordDatesByMonth(userId, year, month);
     }
 }

@@ -6,6 +6,7 @@ import ReDay.record.application.dto.request.TextRecordRequest;
 import ReDay.record.application.dto.response.RecordListItemResponse;
 import ReDay.record.application.dto.response.RecordSaveResponse;
 import ReDay.record.application.usecase.DeleteRecordUseCase;
+import ReDay.record.application.usecase.GetRecordDatesByMonthUseCase;
 import ReDay.record.application.usecase.GetRecordsByDateUseCase;
 import ReDay.record.application.usecase.SavePhotoRecordUseCase;
 import ReDay.record.application.usecase.SaveTextRecordUseCase;
@@ -16,6 +17,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -40,10 +42,21 @@ import org.springframework.web.multipart.MultipartFile;
 public class RecordController {
 
     private final DeleteRecordUseCase deleteRecordUseCase;
+    private final GetRecordDatesByMonthUseCase getRecordDatesByMonthUseCase;
     private final GetRecordsByDateUseCase getRecordsByDateUseCase;
     private final SaveTextRecordUseCase saveTextRecordUseCase;
     private final SavePhotoRecordUseCase savePhotoRecordUseCase;
     private final SaveVoiceRecordUseCase saveVoiceRecordUseCase;
+
+    @Operation(summary = "월별 기록 있는 날짜 목록 조회")
+    @GetMapping("/dates")
+    public CommonResponse<Map<String, List<LocalDate>>> getRecordDatesByMonth(
+            @AuthenticationPrincipal Long userId,
+            @RequestParam int year,
+            @RequestParam int month) {
+        return CommonResponse.success(ResponseMessage.RECORD_FETCHED,
+                Map.of("dates", getRecordDatesByMonthUseCase.execute(userId, year, month)));
+    }
 
     @Operation(summary = "날짜별 기록 조회")
     @GetMapping
