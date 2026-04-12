@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RecordRepository extends JpaRepository<Record, Long> {
 
+    List<Record> findByUserIdAndRecordDate(Long userId, LocalDate recordDate);
+
     List<Record> findByUserIdAndRecordDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
 
     List<Record> findByUserIdAndRecordDateGreaterThanEqual(Long userId, LocalDate startDate);

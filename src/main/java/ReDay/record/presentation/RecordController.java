@@ -3,8 +3,10 @@ package ReDay.record.presentation;
 import ReDay.common.response.CommonResponse;
 import ReDay.common.response.ResponseMessage;
 import ReDay.record.application.dto.request.TextRecordRequest;
+import ReDay.record.application.dto.response.RecordListItemResponse;
 import ReDay.record.application.dto.response.RecordSaveResponse;
 import ReDay.record.application.usecase.DeleteRecordUseCase;
+import ReDay.record.application.usecase.GetRecordsByDateUseCase;
 import ReDay.record.application.usecase.SavePhotoRecordUseCase;
 import ReDay.record.application.usecase.SaveTextRecordUseCase;
 import ReDay.record.application.usecase.SaveVoiceRecordUseCase;
@@ -13,12 +15,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,9 +40,19 @@ import org.springframework.web.multipart.MultipartFile;
 public class RecordController {
 
     private final DeleteRecordUseCase deleteRecordUseCase;
+    private final GetRecordsByDateUseCase getRecordsByDateUseCase;
     private final SaveTextRecordUseCase saveTextRecordUseCase;
     private final SavePhotoRecordUseCase savePhotoRecordUseCase;
     private final SaveVoiceRecordUseCase saveVoiceRecordUseCase;
+
+    @Operation(summary = "날짜별 기록 조회")
+    @GetMapping
+    public CommonResponse<List<RecordListItemResponse>> getRecordsByDate(
+            @AuthenticationPrincipal Long userId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return CommonResponse.success(ResponseMessage.RECORD_FETCHED,
+                getRecordsByDateUseCase.execute(userId, date));
+    }
 
     @Operation(summary = "기록 삭제")
     @DeleteMapping("/{recordId}")

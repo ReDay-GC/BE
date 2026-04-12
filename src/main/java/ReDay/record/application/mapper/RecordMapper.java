@@ -26,7 +26,8 @@ public class RecordMapper {
     public static RecordSaveResponse toResponse(Record record) {
         return new RecordSaveResponse(
                 record.getId(),
-                record.getCreatedAt()
+                record.getCreatedAt(),
+                record.getMediaUrl()
         );
     }
 }
