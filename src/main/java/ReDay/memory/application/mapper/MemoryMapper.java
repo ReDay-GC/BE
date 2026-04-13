@@ -34,7 +34,8 @@ public class MemoryMapper {
         );
     }
 
-    public static MemoryListResponse toMemoryListResponse(Memory memory, long recordCount) {
+    public static MemoryListResponse toMemoryListResponse(Memory memory, long recordCount,
+                                                           List<String> tags, List<String> people) {
         return new MemoryListResponse(
                 memory.getId(),
                 memory.getTitle(),
@@ -43,7 +44,9 @@ public class MemoryMapper {
                 memory.getEmotion(),
                 memory.getThumbnailUrl(),
                 memory.getLocation(),
-                recordCount
+                recordCount,
+                tags,
+                people
         );
     }
 

@@ -5,6 +5,7 @@ import ReDay.memory.application.dto.response.MemoryListResponse;
 import ReDay.memory.application.mapper.MemoryMapper;
 import ReDay.memory.domain.entity.Memory;
 import ReDay.memory.domain.service.MemorySaveService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,9 @@ public class CreateMemoryUseCase {
     public MemoryListResponse execute(MemorySaveRequest request) {
         Memory memory = memorySaveService.save(request);
 
-        return MemoryMapper.toMemoryListResponse(memory, 0);
+        List<String> tags = request.tags() != null ? request.tags() : List.of();
+        List<String> people = request.people() != null ? request.people() : List.of();
+
+        return MemoryMapper.toMemoryListResponse(memory, 0, tags, people);
     }
 }
