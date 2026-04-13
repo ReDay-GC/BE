@@ -3,8 +3,10 @@ package ReDay.memory.domain.service;
 import ReDay.memory.application.dto.request.MemorySaveRequest;
 import ReDay.memory.domain.entity.Memory;
 import ReDay.memory.domain.entity.MemoryPerson;
+import ReDay.memory.domain.entity.MemoryRecordMapping;
 import ReDay.memory.domain.entity.MemoryTag;
 import ReDay.memory.domain.repository.MemoryPersonRepository;
+import ReDay.memory.domain.repository.MemoryRecordMappingRepository;
 import ReDay.memory.domain.repository.MemoryRepository;
 import ReDay.memory.domain.repository.MemoryTagRepository;
 import java.util.List;
@@ -20,6 +22,7 @@ public class MemorySaveService {
     private final MemoryRepository memoryRepository;
     private final MemoryTagRepository memoryTagRepository;
     private final MemoryPersonRepository memoryPersonRepository;
+    private final MemoryRecordMappingRepository memoryRecordMappingRepository;
 
     public Memory save(MemorySaveRequest request) {
         Memory memory = Memory.builder()
@@ -47,6 +50,13 @@ public class MemorySaveService {
                     .map(name -> MemoryPerson.builder().personName(name).memory(memory).build())
                     .toList();
             memoryPersonRepository.saveAll(people);
+        }
+
+        if (request.recordIds() != null) {
+            List<MemoryRecordMapping> mappings = request.recordIds().stream()
+                    .map(recordId -> MemoryRecordMapping.builder().memory(memory).recordId(recordId).build())
+                    .toList();
+            memoryRecordMappingRepository.saveAll(mappings);
         }
 
         return memory;

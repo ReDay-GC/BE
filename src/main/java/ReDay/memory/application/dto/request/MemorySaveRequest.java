@@ -12,6 +12,7 @@ public record MemorySaveRequest(
         String thumbnailUrl,
         String location,
         List<String> tags,
-        List<String> people
+        List<String> people,
+        List<Long> recordIds
 ) {
 }
