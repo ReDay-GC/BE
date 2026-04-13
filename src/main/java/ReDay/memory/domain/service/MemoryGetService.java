@@ -25,7 +25,7 @@ public class MemoryGetService {
     }
 
     public List<Memory> searchMemoryByKeyword(String keyword) {
-        return memoryRepository.findAllByTitleContainingIgnoreCaseOrderByMemoryDateDesc(keyword);
+        return memoryRepository.searchByKeyword(keyword);
     }
 
     public List<Memory> getMemoriesByDate(LocalDate date) {
