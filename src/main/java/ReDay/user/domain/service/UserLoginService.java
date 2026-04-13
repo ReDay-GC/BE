@@ -30,6 +30,6 @@ public class UserLoginService {
         }
 
         String token = jwtProvider.generateToken(user.getId());
-        return new LoginResponse(token);
+        return new LoginResponse(user.getId(), token);
     }
 }
