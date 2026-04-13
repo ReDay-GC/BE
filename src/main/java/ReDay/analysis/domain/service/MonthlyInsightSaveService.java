@@ -58,4 +58,22 @@ public class MonthlyInsightSaveService {
 
         return monthlyInsightRepository.save(insight);
     }
+
+    @Transactional
+    public void saveFromExternal(Long userId, int year, int month, String insightText,
+                                  List<PersonEntry> topPeople, List<ActivityEntry> topActivities) {
+        monthlyInsightRepository.findByUserIdAndYearAndMonth(userId, year, month)
+                .ifPresent(monthlyInsightRepository::delete);
+
+        MonthlyInsight insight = MonthlyInsight.builder()
+                .userId(userId)
+                .year(year)
+                .month(month)
+                .insightText(insightText)
+                .topPeople(topPeople)
+                .topActivities(topActivities)
+                .build();
+
+        monthlyInsightRepository.save(insight);
+    }
 }

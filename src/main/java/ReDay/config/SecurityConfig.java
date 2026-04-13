@@ -25,6 +25,7 @@ public class SecurityConfig {
             "/api/auth/signup",
             "/api/auth/login",
             "/api/admin/auth/login",
+            "/api/analysis/monthly/insight",
             "/actuator/health",
             "/swagger-ui/**",
             "/v3/api-docs/**"

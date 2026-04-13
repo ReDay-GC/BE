@@ -20,6 +20,9 @@ jwt:
   secret: ${JWT_SECRET}
   expiration-ms: 86400000   # 24h
 
+internal:
+  api-key: ${INTERNAL_API_KEY}
+
 openai:
   api:
     key: ${OPENAI_API_KEY}
