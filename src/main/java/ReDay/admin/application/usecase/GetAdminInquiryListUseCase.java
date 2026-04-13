@@ -21,7 +21,7 @@ public class GetAdminInquiryListUseCase {
     private final UserRepository userRepository;
 
     public List<AdminInquiryListResponse> execute(InquiryStatus status, String keyword) {
-        List<Inquiry> inquiries = inquiryRepository.findAdminInquiries(status, keyword);
+        List<Inquiry> inquiries = fetchInquiries(status, keyword);
 
         Set<Long> userIds = inquiries.stream()
                 .map(Inquiry::getUserId)
@@ -40,5 +40,21 @@ public class GetAdminInquiryListUseCase {
                         i.getCreatedAt()
                 ))
                 .toList();
+    }
+
+    private List<Inquiry> fetchInquiries(InquiryStatus status, String keyword) {
+        boolean hasStatus = status != null;
+        boolean hasKeyword = keyword != null && !keyword.isBlank();
+
+        if (hasStatus && hasKeyword) {
+            return inquiryRepository.searchByKeywordAndStatus(keyword, status);
+        }
+        if (hasStatus) {
+            return inquiryRepository.findAllByStatusOrderByCreatedAtDesc(status);
+        }
+        if (hasKeyword) {
+            return inquiryRepository.searchByKeyword(keyword);
+        }
+        return inquiryRepository.findAllByOrderByCreatedAtDesc();
     }
 }

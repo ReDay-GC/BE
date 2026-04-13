@@ -14,9 +14,19 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     Optional<Inquiry> findByIdAndUserId(Long id, Long userId);
 
+    List<Inquiry> findAllByOrderByCreatedAtDesc();
+
+    List<Inquiry> findAllByStatusOrderByCreatedAtDesc(InquiryStatus status);
+
     @Query("SELECT i FROM Inquiry i WHERE " +
-            "(:status IS NULL OR i.status = :status) AND " +
-            "(:keyword IS NULL OR LOWER(i.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(i.content) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "LOWER(i.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(i.content) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "ORDER BY i.createdAt DESC")
-    List<Inquiry> findAdminInquiries(@Param("status") InquiryStatus status, @Param("keyword") String keyword);
+    List<Inquiry> searchByKeyword(@Param("keyword") String keyword);
+
+    @Query("SELECT i FROM Inquiry i WHERE i.status = :status AND (" +
+            "LOWER(i.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(i.content) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "ORDER BY i.createdAt DESC")
+    List<Inquiry> searchByKeywordAndStatus(@Param("keyword") String keyword, @Param("status") InquiryStatus status);
 }
