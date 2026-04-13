@@ -47,7 +47,7 @@ public class GetAdminInquiryListUseCase {
         boolean hasKeyword = keyword != null && !keyword.isBlank();
 
         if (hasStatus && hasKeyword) {
-            return inquiryRepository.searchByKeywordAndStatus(keyword, status);
+            return inquiryRepository.searchByKeywordAndStatus(keyword, status.name());
         }
         if (hasStatus) {
             return inquiryRepository.findAllByStatusOrderByCreatedAtDesc(status);

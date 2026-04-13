@@ -18,15 +18,15 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     List<Inquiry> findAllByStatusOrderByCreatedAtDesc(InquiryStatus status);
 
-    @Query("SELECT i FROM Inquiry i WHERE " +
-            "LOWER(i.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(i.content) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "ORDER BY i.createdAt DESC")
+    @Query(value = "SELECT * FROM inquiry WHERE " +
+            "LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(content) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "ORDER BY created_at DESC", nativeQuery = true)
     List<Inquiry> searchByKeyword(@Param("keyword") String keyword);
 
-    @Query("SELECT i FROM Inquiry i WHERE i.status = :status AND (" +
-            "LOWER(i.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(i.content) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
-            "ORDER BY i.createdAt DESC")
-    List<Inquiry> searchByKeywordAndStatus(@Param("keyword") String keyword, @Param("status") InquiryStatus status);
+    @Query(value = "SELECT * FROM inquiry WHERE status = :status AND (" +
+            "LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(content) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "ORDER BY created_at DESC", nativeQuery = true)
+    List<Inquiry> searchByKeywordAndStatus(@Param("keyword") String keyword, @Param("status") String status);
 }
