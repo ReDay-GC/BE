@@ -67,7 +67,9 @@ public enum ResponseMessage {
     ADMIN_USER_UPDATED(1105, "회원 정보가 수정되었습니다."),
     ADMIN_USER_DELETED(1106, "회원 계정이 삭제되었습니다."),
     ADMIN_SERVICE_STATS_FETCHED(1107, "서비스 통계를 조회했습니다."),
-    ADMIN_AI_STATS_FETCHED(1108, "AI 서비스 통계를 조회했습니다.");
+    ADMIN_AI_STATS_FETCHED(1108, "AI 서비스 통계를 조회했습니다."),
+    ADMIN_AI_MONITORING_STATS_FETCHED(1109, "AI 모니터링 통계를 조회했습니다."),
+    ADMIN_AI_MONITORING_LOGS_FETCHED(1110, "AI 처리 로그를 조회했습니다.");
 
     private final int code;
     private final String message;
