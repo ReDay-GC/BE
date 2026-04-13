@@ -16,6 +16,10 @@ public class NoticeGetService {
     private final NoticeRepository noticeRepository;
 
     public List<Notice> getNoticeList() {
+        return noticeRepository.findAllByIsPublicTrueOrderByCreatedAtDesc();
+    }
+
+    public List<Notice> getAllNoticeList() {
         return noticeRepository.findAllByOrderByCreatedAtDesc();
     }
 

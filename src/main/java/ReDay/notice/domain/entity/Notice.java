@@ -30,9 +30,19 @@ public class Notice extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
+    private boolean isPublic = true;
+
     @Builder
-    private Notice(String title, String content) {
+    private Notice(String title, String content, boolean isPublic) {
         this.title = title;
         this.content = content;
+        this.isPublic = isPublic;
+    }
+
+    public void update(String title, String content, boolean isPublic) {
+        this.title = title;
+        this.content = content;
+        this.isPublic = isPublic;
     }
 }

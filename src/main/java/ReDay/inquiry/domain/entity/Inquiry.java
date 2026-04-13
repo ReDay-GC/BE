@@ -53,4 +53,14 @@ public class Inquiry extends BaseTimeEntity {
         this.content = content;
         this.status = InquiryStatus.WAITING;
     }
+
+    public void reply(String content) {
+        this.replyContent = content;
+        this.repliedAt = LocalDateTime.now();
+        this.status = InquiryStatus.ANSWERED;
+    }
+
+    public void changeStatus(InquiryStatus newStatus) {
+        this.status = newStatus;
+    }
 }
