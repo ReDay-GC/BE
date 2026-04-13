@@ -25,4 +25,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     long countByRecordType(String recordType);
 
     List<Record> findByUserIdAndLatitudeIsNotNullAndLongitudeIsNotNull(Long userId);
+
+    @Query("SELECT r FROM Record r WHERE r.id IN :ids AND r.latitude IS NOT NULL AND r.longitude IS NOT NULL ORDER BY r.id ASC")
+    List<Record> findWithLocationByIds(@Param("ids") List<Long> ids);
 }

@@ -6,9 +6,11 @@ import ReDay.record.application.dto.request.TextRecordRequest;
 import ReDay.record.application.dto.response.RecordListItemResponse;
 import ReDay.record.application.dto.response.RecordSaveResponse;
 import ReDay.record.application.dto.response.RecordLocationResponse;
+import ReDay.record.application.dto.response.RecordSummaryResponse;
 import ReDay.record.application.usecase.DeleteRecordUseCase;
 import ReDay.record.application.usecase.GetRecordDatesByMonthUseCase;
 import ReDay.record.application.usecase.GetRecordLocationsUseCase;
+import ReDay.record.application.usecase.GetRecordSummaryUseCase;
 import ReDay.record.application.usecase.GetRecordsByDateUseCase;
 import ReDay.record.application.usecase.SavePhotoRecordUseCase;
 import ReDay.record.application.usecase.SaveTextRecordUseCase;
@@ -47,6 +49,7 @@ public class RecordController {
     private final GetRecordDatesByMonthUseCase getRecordDatesByMonthUseCase;
     private final GetRecordsByDateUseCase getRecordsByDateUseCase;
     private final GetRecordLocationsUseCase getRecordLocationsUseCase;
+    private final GetRecordSummaryUseCase getRecordSummaryUseCase;
     private final SaveTextRecordUseCase saveTextRecordUseCase;
     private final SavePhotoRecordUseCase savePhotoRecordUseCase;
     private final SaveVoiceRecordUseCase saveVoiceRecordUseCase;
@@ -59,6 +62,14 @@ public class RecordController {
             @RequestParam int month) {
         return CommonResponse.success(ResponseMessage.RECORD_FETCHED,
                 Map.of("dates", getRecordDatesByMonthUseCase.execute(userId, year, month)));
+    }
+
+    @Operation(summary = "기록 타입별 통계 조회", description = "사진/텍스트/음성 기록 수를 반환합니다.")
+    @GetMapping("/summary")
+    public CommonResponse<RecordSummaryResponse> getRecordSummary(
+            @AuthenticationPrincipal Long userId) {
+        return CommonResponse.success(ResponseMessage.RECORD_FETCHED,
+                getRecordSummaryUseCase.execute(userId));
     }
 
     @Operation(summary = "위치 있는 기록 전체 조회", description = "위도/경도가 있는 기록을 전부 반환합니다. 지도 마커 표시용.")
