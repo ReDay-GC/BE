@@ -9,6 +9,7 @@ import ReDay.notification.application.usecase.GetNotificationSettingUseCase;
 import ReDay.notification.application.usecase.GetNotificationsUseCase;
 import ReDay.notification.application.usecase.ReadNotificationUseCase;
 import ReDay.notification.application.usecase.UpdateNotificationSettingUseCase;
+import ReDay.notification.domain.entity.NotificationCategory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Notification", description = "알림 API")
@@ -33,12 +35,13 @@ public class NotificationController {
     private final GetNotificationSettingUseCase getNotificationSettingUseCase;
     private final UpdateNotificationSettingUseCase updateNotificationSettingUseCase;
 
-    @Operation(summary = "알림 목록 조회", description = "사용자의 알림 목록을 최신순으로 조회합니다.")
+    @Operation(summary = "알림 목록 조회", description = "사용자의 알림 목록을 최신순으로 조회합니다. category: ALL(전체), SYSTEM(시스템), MY(내 알림)")
     @GetMapping
     public CommonResponse<List<NotificationResponse>> getNotifications(
-            @AuthenticationPrincipal Long userId
+            @AuthenticationPrincipal Long userId,
+            @RequestParam(required = false, defaultValue = "ALL") NotificationCategory category
     ) {
-        List<NotificationResponse> response = getNotificationsUseCase.execute(userId);
+        List<NotificationResponse> response = getNotificationsUseCase.execute(userId, category);
 
         return CommonResponse.success(ResponseMessage.NOTIFICATION_FETCHED, response);
     }

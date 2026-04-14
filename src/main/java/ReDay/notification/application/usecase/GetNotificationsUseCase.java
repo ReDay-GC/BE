@@ -2,6 +2,7 @@ package ReDay.notification.application.usecase;
 
 import ReDay.notification.application.dto.response.NotificationResponse;
 import ReDay.notification.domain.entity.Notification;
+import ReDay.notification.domain.entity.NotificationCategory;
 import ReDay.notification.domain.service.NotificationGetService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,8 @@ public class GetNotificationsUseCase {
 
     private final NotificationGetService notificationGetService;
 
-    public List<NotificationResponse> execute(Long userId) {
-        return notificationGetService.getNotifications(userId)
+    public List<NotificationResponse> execute(Long userId, NotificationCategory category) {
+        return notificationGetService.getNotifications(userId, category)
                 .stream()
                 .map(this::toResponse)
                 .toList();
