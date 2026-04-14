@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
         log.warn("BusinessException: {}", e.getMessage());
 
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(e.getCode())
                 .body(CommonResponse.fail(e.getCode(), e.getMessage()));
     }
 
