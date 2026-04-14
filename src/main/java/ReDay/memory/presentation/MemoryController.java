@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,8 +71,10 @@ public class MemoryController {
 
     @Operation(summary = "기억 생성", description = "새로운 기억을 생성합니다.")
     @PostMapping
-    public CommonResponse<MemoryListResponse> createMemory(@RequestBody MemorySaveRequest request) {
-        MemoryListResponse response = createMemoryUseCase.execute(request);
+    public CommonResponse<MemoryListResponse> createMemory(
+            @AuthenticationPrincipal Long userId,
+            @RequestBody MemorySaveRequest request) {
+        MemoryListResponse response = createMemoryUseCase.execute(userId, request);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_GENERATED,
