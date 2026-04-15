@@ -35,9 +35,7 @@ public class CreateAdminNoticeUseCase {
                     allUserIds,
                     NotificationType.NOTICE,
                     "새 공지사항이 등록되었어요",
-                    request.content().length() > 50
-                            ? request.content().substring(0, 50) + "..."
-                            : request.content(),
+                    request.title(),
                     notice.getId()
             );
         }
