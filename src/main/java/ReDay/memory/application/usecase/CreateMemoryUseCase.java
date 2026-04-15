@@ -28,7 +28,8 @@ public class CreateMemoryUseCase {
                 userId,
                 NotificationType.AI_GENERATION,
                 "기억이 생성됐어요",
-                "'" + memory.getTitle() + "' 기억이 생성되었습니다."
+                "'" + memory.getTitle() + "' 기억이 생성되었습니다.",
+                memory.getId()
         );
 
         return MemoryMapper.toMemoryListResponse(memory, 0, tags, people);

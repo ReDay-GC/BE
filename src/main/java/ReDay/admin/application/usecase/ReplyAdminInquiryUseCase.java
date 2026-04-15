@@ -28,7 +28,8 @@ public class ReplyAdminInquiryUseCase {
                 inquiry.getUserId(),
                 NotificationType.INQUIRY_ANSWER,
                 "문의 답변이 도착했어요",
-                "'" + inquiry.getTitle() + "' 문의에 답변이 등록되었습니다."
+                "'" + inquiry.getTitle() + "' 문의에 답변이 등록되었습니다.",
+                inquiryId
         );
     }
 }

@@ -21,7 +21,7 @@ public class CreateAdminNoticeUseCase {
 
     @Transactional
     public void execute(AdminNoticeSaveRequest request) {
-        noticeRepository.save(Notice.builder()
+        Notice notice = noticeRepository.save(Notice.builder()
                 .title(request.title())
                 .content(request.content())
                 .isPublic(request.isPublic())
@@ -37,7 +37,8 @@ public class CreateAdminNoticeUseCase {
                     "[공지] " + request.title(),
                     request.content().length() > 50
                             ? request.content().substring(0, 50) + "..."
-                            : request.content()
+                            : request.content(),
+                    notice.getId()
             );
         }
     }

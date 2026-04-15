@@ -9,6 +9,7 @@ public record NotificationResponse(
         String title,
         String content,
         boolean isRead,
+        Long relatedId,
         LocalDateTime createdAt
 ) {
 }

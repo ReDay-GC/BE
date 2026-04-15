@@ -15,23 +15,25 @@ public class NotificationSaveService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public void save(Long userId, NotificationType type, String title, String content) {
+    public void save(Long userId, NotificationType type, String title, String content, Long relatedId) {
         notificationRepository.save(Notification.builder()
                 .userId(userId)
                 .type(type)
                 .title(title)
                 .content(content)
+                .relatedId(relatedId)
                 .build());
     }
 
     @Transactional
-    public void saveAll(List<Long> userIds, NotificationType type, String title, String content) {
+    public void saveAll(List<Long> userIds, NotificationType type, String title, String content, Long relatedId) {
         List<Notification> notifications = userIds.stream()
                 .map(userId -> Notification.builder()
                         .userId(userId)
                         .type(type)
                         .title(title)
                         .content(content)
+                        .relatedId(relatedId)
                         .build())
                 .toList();
         notificationRepository.saveAll(notifications);

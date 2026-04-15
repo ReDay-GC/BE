@@ -40,12 +40,16 @@ public class Notification extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean isRead;
 
+    @Column
+    private Long relatedId;
+
     @Builder
-    private Notification(Long userId, NotificationType type, String title, String content) {
+    private Notification(Long userId, NotificationType type, String title, String content, Long relatedId) {
         this.userId = userId;
         this.type = type;
         this.title = title;
         this.content = content;
+        this.relatedId = relatedId;
         this.isRead = false;
     }
 

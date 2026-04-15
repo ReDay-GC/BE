@@ -28,6 +28,7 @@ public class GetNotificationsUseCase {
                 notification.getTitle(),
                 notification.getContent(),
                 notification.isRead(),
+                notification.getRelatedId(),
                 notification.getCreatedAt()
         );
     }
