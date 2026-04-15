@@ -27,8 +27,8 @@ public class CreateMemoryUseCase {
         notificationSaveService.save(
                 userId,
                 NotificationType.AI_GENERATION,
-                "기억이 생성됐어요",
-                "'" + memory.getTitle() + "' 기억이 생성되었습니다.",
+                "AI 생성을 잊으셨나요?",
+                memory.getMemoryDate() + "에 추가한 기억이 아직 완성되지 않았어요",
                 memory.getId()
         );
 

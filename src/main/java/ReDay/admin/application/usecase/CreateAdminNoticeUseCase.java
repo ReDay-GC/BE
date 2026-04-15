@@ -34,7 +34,7 @@ public class CreateAdminNoticeUseCase {
             notificationSaveService.saveAll(
                     allUserIds,
                     NotificationType.NOTICE,
-                    "[공지] " + request.title(),
+                    "새 공지사항이 등록되었어요",
                     request.content().length() > 50
                             ? request.content().substring(0, 50) + "..."
                             : request.content(),

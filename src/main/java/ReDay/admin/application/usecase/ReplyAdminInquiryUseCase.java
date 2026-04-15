@@ -27,8 +27,8 @@ public class ReplyAdminInquiryUseCase {
         notificationSaveService.save(
                 inquiry.getUserId(),
                 NotificationType.INQUIRY_ANSWER,
-                "문의 답변이 도착했어요",
-                "'" + inquiry.getTitle() + "' 문의에 답변이 등록되었습니다.",
+                "문의하신 내용에 답변이 도착했어요",
+                "'" + inquiry.getTitle() + "'에 대한 답변을 확인해보세요",
                 inquiryId
         );
     }
