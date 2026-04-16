@@ -16,7 +16,7 @@ public class GetNotificationSettingUseCase {
         NotificationSetting setting = notificationSettingService.getSetting(userId);
 
         return new NotificationSettingResponse(
-                setting.isPushEnabled(),
+                setting.isSystemEnabled(),
                 setting.isDailyRecordEnabled(),
                 setting.isAiGenerationEnabled()
         );

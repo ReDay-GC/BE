@@ -19,14 +19,14 @@ public class NotificationSettingService {
     }
 
     @Transactional
-    public NotificationSetting updateSetting(Long userId, boolean pushEnabled,
+    public NotificationSetting updateSetting(Long userId, boolean systemEnabled,
             boolean dailyRecordEnabled, boolean aiGenerationEnabled) {
         NotificationSetting setting = notificationSettingRepository.findByUserId(userId)
                 .orElseGet(() -> notificationSettingRepository.save(
                         NotificationSetting.builder().userId(userId).build()
                 ));
 
-        setting.update(pushEnabled, dailyRecordEnabled, aiGenerationEnabled);
+        setting.update(systemEnabled, dailyRecordEnabled, aiGenerationEnabled);
         return setting;
     }
 }

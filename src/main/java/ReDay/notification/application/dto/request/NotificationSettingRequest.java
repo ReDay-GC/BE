@@ -1,7 +1,7 @@
 package ReDay.notification.application.dto.request;
 
 public record NotificationSettingRequest(
-        boolean pushEnabled,
+        boolean systemEnabled,
         boolean dailyRecordEnabled,
         boolean aiGenerationEnabled
 ) {

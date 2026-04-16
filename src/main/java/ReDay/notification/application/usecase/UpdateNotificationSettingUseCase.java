@@ -16,13 +16,13 @@ public class UpdateNotificationSettingUseCase {
     public NotificationSettingResponse execute(Long userId, NotificationSettingRequest request) {
         NotificationSetting setting = notificationSettingService.updateSetting(
                 userId,
-                request.pushEnabled(),
+                request.systemEnabled(),
                 request.dailyRecordEnabled(),
                 request.aiGenerationEnabled()
         );
 
         return new NotificationSettingResponse(
-                setting.isPushEnabled(),
+                setting.isSystemEnabled(),
                 setting.isDailyRecordEnabled(),
                 setting.isAiGenerationEnabled()
         );

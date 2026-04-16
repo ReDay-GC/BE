@@ -53,13 +53,10 @@ public class NotificationSaveService {
         if (setting == null) {
             return true;
         }
-        if (!setting.isPushEnabled()) {
-            return false;
-        }
         return switch (type) {
+            case NOTICE, INQUIRY_ANSWER, MAINTENANCE -> setting.isSystemEnabled();
             case DAILY_RECORD -> setting.isDailyRecordEnabled();
             case AI_GENERATION -> setting.isAiGenerationEnabled();
-            default -> true;
         };
     }
 }

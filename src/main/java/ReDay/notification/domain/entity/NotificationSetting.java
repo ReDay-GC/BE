@@ -26,7 +26,7 @@ public class NotificationSetting extends BaseTimeEntity {
     private Long userId;
 
     @Column(nullable = false)
-    private boolean pushEnabled;
+    private boolean systemEnabled;
 
     @Column(nullable = false)
     private boolean dailyRecordEnabled;
@@ -37,13 +37,13 @@ public class NotificationSetting extends BaseTimeEntity {
     @Builder
     private NotificationSetting(Long userId) {
         this.userId = userId;
-        this.pushEnabled = true;
+        this.systemEnabled = true;
         this.dailyRecordEnabled = true;
         this.aiGenerationEnabled = true;
     }
 
-    public void update(boolean pushEnabled, boolean dailyRecordEnabled, boolean aiGenerationEnabled) {
-        this.pushEnabled = pushEnabled;
+    public void update(boolean systemEnabled, boolean dailyRecordEnabled, boolean aiGenerationEnabled) {
+        this.systemEnabled = systemEnabled;
         this.dailyRecordEnabled = dailyRecordEnabled;
         this.aiGenerationEnabled = aiGenerationEnabled;
     }
