@@ -58,7 +58,8 @@ public class AuthController {
     @GetMapping("/check-id")
     public CommonResponse<Boolean> checkId(@RequestParam String id) {
         boolean available = checkIdDuplicateUseCase.execute(id);
-        return CommonResponse.success(ResponseMessage.ID_CHECK_SUCCESS, available);
+        ResponseMessage message = available ? ResponseMessage.ID_AVAILABLE : ResponseMessage.ID_ALREADY_EXISTS;
+        return CommonResponse.success(message, available);
     }
 
     @Operation(summary = "로그아웃")
