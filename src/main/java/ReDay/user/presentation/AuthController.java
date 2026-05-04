@@ -6,6 +6,7 @@ import ReDay.user.application.dto.request.LoginRequest;
 import ReDay.user.application.dto.request.SignUpRequest;
 import ReDay.user.application.dto.response.LoginResponse;
 import ReDay.user.application.dto.response.SignUpResponse;
+import ReDay.user.application.usecase.CheckIdDuplicateUseCase;
 import ReDay.user.application.usecase.LoginUseCase;
 import ReDay.user.application.usecase.LogoutUseCase;
 import ReDay.user.application.usecase.SignUpUseCase;
@@ -17,10 +18,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +37,7 @@ public class AuthController {
     private final LoginUseCase loginUseCase;
     private final LogoutUseCase logoutUseCase;
     private final WithdrawUseCase withdrawUseCase;
+    private final CheckIdDuplicateUseCase checkIdDuplicateUseCase;
 
     @Operation(summary = "회원가입")
     @PostMapping("/signup")
@@ -48,6 +52,13 @@ public class AuthController {
     public CommonResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = loginUseCase.execute(request);
         return CommonResponse.success(ResponseMessage.LOGIN_SUCCESS, response);
+    }
+
+    @Operation(summary = "아이디 중복 확인", description = "true = 사용 가능, false = 이미 사용 중")
+    @GetMapping("/check-id")
+    public CommonResponse<Boolean> checkId(@RequestParam String id) {
+        boolean available = checkIdDuplicateUseCase.execute(id);
+        return CommonResponse.success(ResponseMessage.ID_CHECK_SUCCESS, available);
     }
 
     @Operation(summary = "로그아웃")

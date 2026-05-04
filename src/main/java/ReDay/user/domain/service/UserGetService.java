@@ -19,4 +19,8 @@ public class UserGetService {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
+
+    public boolean existsById(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }

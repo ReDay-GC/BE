@@ -13,6 +13,7 @@ public enum ResponseMessage {
     LOGIN_SUCCESS(100, "로그인에 성공했습니다."),
     LOGOUT_SUCCESS(101, "로그아웃에 성공했습니다."),
     SIGNUP_SUCCESS(102, "회원가입에 성공했습니다."),
+    ID_CHECK_SUCCESS(103, "아이디 중복 확인이 완료되었습니다."),
 
     // Record
     RECORD_CREATED(200, "기록이 저장되었습니다."),
