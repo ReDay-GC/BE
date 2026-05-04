@@ -20,32 +20,32 @@ public class MemoryGetService {
                 .orElseThrow(MemoryNotFoundException::new);
     }
 
-    public List<Memory> getMemoryList() {
-        return memoryRepository.findAllByOrderByMemoryDateDesc();
+    public List<Memory> getMemoryList(Long userId) {
+        return memoryRepository.findAllByUserIdOrderByMemoryDateDesc(userId);
     }
 
-    public List<Memory> searchMemoryByKeyword(String keyword) {
-        return memoryRepository.searchByKeyword(keyword);
+    public List<Memory> searchMemoryByKeyword(Long userId, String keyword) {
+        return memoryRepository.searchByUserIdAndKeyword(userId, keyword);
     }
 
-    public List<Memory> getMemoriesByDate(LocalDate date) {
-        return memoryRepository.findAllByMemoryDate(date);
+    public List<Memory> getMemoriesByDate(Long userId, LocalDate date) {
+        return memoryRepository.findAllByUserIdAndMemoryDate(userId, date);
     }
 
-    public List<Memory> getMemoriesWithLocation() {
-        return memoryRepository.findAllByLocationIsNotNull();
+    public List<Memory> getMemoriesWithLocation(Long userId) {
+        return memoryRepository.findAllByUserIdAndLocationIsNotNull(userId);
     }
 
-    public List<Memory> getMemoriesByLocation(String location) {
-        return memoryRepository.findAllByLocation(location);
+    public List<Memory> getMemoriesByLocation(Long userId, String location) {
+        return memoryRepository.findAllByUserIdAndLocation(userId, location);
     }
 
-    public List<LocalDate> getMemoryDatesByYearMonth(int year, int month) {
+    public List<LocalDate> getMemoryDatesByYearMonth(Long userId, int year, int month) {
         YearMonth yearMonth = YearMonth.of(year, month);
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
 
-        return memoryRepository.findAllByMemoryDateBetween(startDate, endDate)
+        return memoryRepository.findAllByUserIdAndMemoryDateBetween(userId, startDate, endDate)
                 .stream()
                 .map(Memory::getMemoryDate)
                 .distinct()

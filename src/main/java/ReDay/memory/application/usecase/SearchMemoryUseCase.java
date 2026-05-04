@@ -20,8 +20,8 @@ public class SearchMemoryUseCase {
     private final MemoryTagRepository memoryTagRepository;
     private final MemoryPersonRepository memoryPersonRepository;
 
-    public List<MemoryListResponse> execute(MemorySearchRequest request) {
-        return memoryGetService.searchMemoryByKeyword(request.keyword())
+    public List<MemoryListResponse> execute(Long userId, MemorySearchRequest request) {
+        return memoryGetService.searchMemoryByKeyword(userId, request.keyword())
                 .stream()
                 .map(memory -> MemoryMapper.toMemoryListResponse(
                         memory,

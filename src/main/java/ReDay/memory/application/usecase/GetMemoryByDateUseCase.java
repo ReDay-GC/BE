@@ -20,8 +20,8 @@ public class GetMemoryByDateUseCase {
     private final MemoryTagRepository memoryTagRepository;
     private final MemoryPersonRepository memoryPersonRepository;
 
-    public List<MemoryListResponse> execute(LocalDate date) {
-        return memoryGetService.getMemoriesByDate(date)
+    public List<MemoryListResponse> execute(Long userId, LocalDate date) {
+        return memoryGetService.getMemoriesByDate(userId, date)
                 .stream()
                 .map(memory -> MemoryMapper.toMemoryListResponse(
                         memory,

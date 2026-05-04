@@ -11,9 +11,9 @@ public class GetMemoryCalendarUseCase {
 
     private final MemoryGetService memoryGetService;
 
-    public MemoryCalendarResponse execute(int year, int month) {
+    public MemoryCalendarResponse execute(Long userId, int year, int month) {
         return new MemoryCalendarResponse(
-                memoryGetService.getMemoryDatesByYearMonth(year, month)
+                memoryGetService.getMemoryDatesByYearMonth(userId, year, month)
         );
     }
 }

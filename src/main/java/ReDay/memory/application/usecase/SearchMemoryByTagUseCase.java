@@ -19,8 +19,8 @@ public class SearchMemoryByTagUseCase {
     private final MemoryTagRepository memoryTagRepository;
     private final MemoryPersonRepository memoryPersonRepository;
 
-    public List<MemoryListResponse> execute(String tagName) {
-        return memoryTagGetService.getMemoriesByTagName(tagName)
+    public List<MemoryListResponse> execute(Long userId, String tagName) {
+        return memoryTagGetService.getMemoriesByTagName(userId, tagName)
                 .stream()
                 .map(memory -> MemoryMapper.toMemoryListResponse(
                         memory,

@@ -10,7 +10,7 @@ public class DeleteMemoryUseCase {
 
     private final MemoryDeleteService memoryDeleteService;
 
-    public void execute(Long memoryId) {
-        memoryDeleteService.delete(memoryId);
+    public void execute(Long userId, Long memoryId) {
+        memoryDeleteService.delete(userId, memoryId);
     }
 }

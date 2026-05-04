@@ -20,8 +20,8 @@ public class GetMemoryListUseCase {
     private final MemoryTagRepository memoryTagRepository;
     private final MemoryPersonRepository memoryPersonRepository;
 
-    public List<MemoryListResponse> execute() {
-        List<Memory> memories = memoryGetService.getMemoryList();
+    public List<MemoryListResponse> execute(Long userId) {
+        List<Memory> memories = memoryGetService.getMemoryList(userId);
 
         return memories.stream()
                 .map(memory -> MemoryMapper.toMemoryListResponse(

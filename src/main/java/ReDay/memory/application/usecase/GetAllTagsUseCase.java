@@ -11,7 +11,7 @@ public class GetAllTagsUseCase {
 
     private final MemoryTagGetService memoryTagGetService;
 
-    public MemoryTagListResponse execute() {
-        return new MemoryTagListResponse(memoryTagGetService.getAllTagNames());
+    public MemoryTagListResponse execute(Long userId) {
+        return new MemoryTagListResponse(memoryTagGetService.getAllTagNames(userId));
     }
 }

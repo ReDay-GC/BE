@@ -1,5 +1,6 @@
 package ReDay.memory.domain.service;
 
+import ReDay.memory.application.exception.MemoryAccessDeniedException;
 import ReDay.memory.application.exception.MemoryNotFoundException;
 import ReDay.memory.domain.entity.Memory;
 import ReDay.memory.domain.repository.MemoryPersonRepository;
@@ -20,9 +21,13 @@ public class MemoryDeleteService {
     private final MemoryPersonRepository memoryPersonRepository;
     private final MemoryRecordMappingRepository memoryRecordMappingRepository;
 
-    public void delete(Long memoryId) {
+    public void delete(Long userId, Long memoryId) {
         Memory memory = memoryRepository.findById(memoryId)
                 .orElseThrow(MemoryNotFoundException::new);
+
+        if (!memory.getUserId().equals(userId)) {
+            throw new MemoryAccessDeniedException();
+        }
 
         memoryTagRepository.deleteAllByMemory(memory);
         memoryPersonRepository.deleteAllByMemory(memory);

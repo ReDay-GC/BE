@@ -52,16 +52,20 @@ public class MemoryController {
 
     @Operation(summary = "기억 삭제", description = "기억 ID를 기준으로 기억을 삭제합니다.")
     @DeleteMapping("/{memoryId}")
-    public CommonResponse<Void> deleteMemory(@PathVariable Long memoryId) {
-        deleteMemoryUseCase.execute(memoryId);
+    public CommonResponse<Void> deleteMemory(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long memoryId) {
+        deleteMemoryUseCase.execute(userId, memoryId);
 
         return CommonResponse.success(ResponseMessage.MEMORY_DELETED, null);
     }
 
     @Operation(summary = "기억 상세 조회", description = "기억 ID를 기준으로 기억 상세 정보를 조회합니다.")
     @GetMapping("/{memoryId}")
-    public CommonResponse<MemoryDetailResponse> getMemoryDetail(@PathVariable Long memoryId) {
-        MemoryDetailResponse response = getMemoryDetailUseCase.execute(memoryId);
+    public CommonResponse<MemoryDetailResponse> getMemoryDetail(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long memoryId) {
+        MemoryDetailResponse response = getMemoryDetailUseCase.execute(userId, memoryId);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_DETAIL_GET_SUCCESS,
@@ -84,8 +88,9 @@ public class MemoryController {
 
     @Operation(summary = "기억 목록 조회", description = "전체 기억 목록을 조회합니다.")
     @GetMapping
-    public CommonResponse<List<MemoryListResponse>> getMemoryList() {
-        List<MemoryListResponse> response = getMemoryListUseCase.execute();
+    public CommonResponse<List<MemoryListResponse>> getMemoryList(
+            @AuthenticationPrincipal Long userId) {
+        List<MemoryListResponse> response = getMemoryListUseCase.execute(userId);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,
@@ -96,10 +101,11 @@ public class MemoryController {
     @Operation(summary = "기억 검색", description = "키워드 기준으로 기억을 검색합니다.")
     @GetMapping("/search")
     public CommonResponse<List<MemoryListResponse>> searchMemory(
+            @AuthenticationPrincipal Long userId,
             @RequestParam String keyword
     ) {
         List<MemoryListResponse> response = searchMemoryUseCase.execute(
-                new MemorySearchRequest(keyword)
+                userId, new MemorySearchRequest(keyword)
         );
 
         return CommonResponse.success(
@@ -111,10 +117,11 @@ public class MemoryController {
     @Operation(summary = "캘린더 조회", description = "특정 연월에 기억이 있는 날짜 목록을 조회합니다.")
     @GetMapping("/calendar")
     public CommonResponse<MemoryCalendarResponse> getMemoryCalendar(
+            @AuthenticationPrincipal Long userId,
             @RequestParam int year,
             @RequestParam int month
     ) {
-        MemoryCalendarResponse response = getMemoryCalendarUseCase.execute(year, month);
+        MemoryCalendarResponse response = getMemoryCalendarUseCase.execute(userId, year, month);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,
@@ -125,9 +132,10 @@ public class MemoryController {
     @Operation(summary = "날짜별 기억 조회", description = "특정 날짜의 기억 목록을 조회합니다.")
     @GetMapping("/date")
     public CommonResponse<List<MemoryListResponse>> getMemoryByDate(
+            @AuthenticationPrincipal Long userId,
             @RequestParam LocalDate date
     ) {
-        List<MemoryListResponse> response = getMemoryByDateUseCase.execute(date);
+        List<MemoryListResponse> response = getMemoryByDateUseCase.execute(userId, date);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,
@@ -137,8 +145,9 @@ public class MemoryController {
 
     @Operation(summary = "전체 태그 목록 조회", description = "등록된 모든 태그 목록을 조회합니다.")
     @GetMapping("/tags")
-    public CommonResponse<MemoryTagListResponse> getAllTags() {
-        MemoryTagListResponse response = getAllTagsUseCase.execute();
+    public CommonResponse<MemoryTagListResponse> getAllTags(
+            @AuthenticationPrincipal Long userId) {
+        MemoryTagListResponse response = getAllTagsUseCase.execute(userId);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,
@@ -149,9 +158,10 @@ public class MemoryController {
     @Operation(summary = "태그별 기억 검색", description = "특정 태그가 포함된 기억 목록을 조회합니다.")
     @GetMapping("/search/tag")
     public CommonResponse<List<MemoryListResponse>> searchMemoryByTag(
+            @AuthenticationPrincipal Long userId,
             @RequestParam String tagName
     ) {
-        List<MemoryListResponse> response = searchMemoryByTagUseCase.execute(tagName);
+        List<MemoryListResponse> response = searchMemoryByTagUseCase.execute(userId, tagName);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,
@@ -162,9 +172,10 @@ public class MemoryController {
     @Operation(summary = "장소별 기억 검색", description = "특정 장소명으로 기억 목록을 조회합니다.")
     @GetMapping("/search/location")
     public CommonResponse<List<MemoryListResponse>> searchMemoryByLocation(
+            @AuthenticationPrincipal Long userId,
             @RequestParam String location
     ) {
-        List<MemoryListResponse> response = searchMemoryByLocationUseCase.execute(location);
+        List<MemoryListResponse> response = searchMemoryByLocationUseCase.execute(userId, location);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,

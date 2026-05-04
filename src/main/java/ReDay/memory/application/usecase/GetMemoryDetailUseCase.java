@@ -2,6 +2,7 @@ package ReDay.memory.application.usecase;
 
 import ReDay.memory.application.dto.response.MemoryAnalysisResponse;
 import ReDay.memory.application.dto.response.MemoryDetailResponse;
+import ReDay.memory.application.exception.MemoryAccessDeniedException;
 import ReDay.memory.application.mapper.MemoryAnalysisMapper;
 import ReDay.memory.application.mapper.MemoryMapper;
 import ReDay.memory.domain.entity.Memory;
@@ -18,8 +19,12 @@ public class GetMemoryDetailUseCase {
     private final MemoryGetService memoryGetService;
     private final MemoryAnalysisService memoryAnalysisService;
 
-    public MemoryDetailResponse execute(Long memoryId) {
+    public MemoryDetailResponse execute(Long userId, Long memoryId) {
         Memory memory = memoryGetService.getMemory(memoryId);
+
+        if (!memory.getUserId().equals(userId)) {
+            throw new MemoryAccessDeniedException();
+        }
 
         MemoryAnalysis analysis = memoryAnalysisService.getAnalysis(memoryId);
 

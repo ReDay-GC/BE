@@ -24,8 +24,9 @@ public class MemorySaveService {
     private final MemoryPersonRepository memoryPersonRepository;
     private final MemoryRecordMappingRepository memoryRecordMappingRepository;
 
-    public Memory save(MemorySaveRequest request) {
+    public Memory save(Long userId, MemorySaveRequest request) {
         Memory memory = Memory.builder()
+                .userId(userId)
                 .title(request.title())
                 .summary(request.summary())
                 .description(request.description())

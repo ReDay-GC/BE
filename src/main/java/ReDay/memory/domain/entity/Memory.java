@@ -23,6 +23,9 @@ public class Memory extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private Long userId;
+
     @Column(nullable = false, length = 100)
     private String title;
 
@@ -49,6 +52,7 @@ public class Memory extends BaseTimeEntity {
 
     @Builder
     private Memory(
+            Long userId,
             String title,
             String summary,
             String description,
@@ -58,6 +62,7 @@ public class Memory extends BaseTimeEntity {
             String location,
             boolean archived
     ) {
+        this.userId = userId;
         this.title = title;
         this.summary = summary;
         this.description = description;

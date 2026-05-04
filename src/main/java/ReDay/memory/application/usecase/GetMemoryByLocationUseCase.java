@@ -19,8 +19,8 @@ public class GetMemoryByLocationUseCase {
     private final MemoryTagRepository memoryTagRepository;
     private final MemoryPersonRepository memoryPersonRepository;
 
-    public List<MemoryListResponse> execute(String location) {
-        return memoryGetService.getMemoriesByLocation(location)
+    public List<MemoryListResponse> execute(Long userId, String location) {
+        return memoryGetService.getMemoriesByLocation(userId, location)
                 .stream()
                 .map(memory -> MemoryMapper.toMemoryListResponse(
                         memory,

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,8 +27,9 @@ public class MemoryMapController {
 
     @Operation(summary = "지도 핀 목록 조회", description = "기억이 있는 장소 목록과 기억 수를 조회합니다.")
     @GetMapping
-    public CommonResponse<List<MemoryMapPinResponse>> getMemoryMap() {
-        List<MemoryMapPinResponse> response = getMemoryMapUseCase.execute();
+    public CommonResponse<List<MemoryMapPinResponse>> getMemoryMap(
+            @AuthenticationPrincipal Long userId) {
+        List<MemoryMapPinResponse> response = getMemoryMapUseCase.execute(userId);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,
@@ -38,9 +40,10 @@ public class MemoryMapController {
     @Operation(summary = "장소별 기억 조회", description = "특정 장소의 기억 목록을 조회합니다.")
     @GetMapping("/location")
     public CommonResponse<List<MemoryListResponse>> getMemoryByLocation(
+            @AuthenticationPrincipal Long userId,
             @RequestParam String location
     ) {
-        List<MemoryListResponse> response = getMemoryByLocationUseCase.execute(location);
+        List<MemoryListResponse> response = getMemoryByLocationUseCase.execute(userId, location);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,

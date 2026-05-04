@@ -19,7 +19,7 @@ public class CreateMemoryUseCase {
     private final NotificationSaveService notificationSaveService;
 
     public MemoryListResponse execute(Long userId, MemorySaveRequest request) {
-        Memory memory = memorySaveService.save(request);
+        Memory memory = memorySaveService.save(userId, request);
 
         List<String> tags = request.tags() != null ? request.tags() : List.of();
         List<String> people = request.people() != null ? request.people() : List.of();

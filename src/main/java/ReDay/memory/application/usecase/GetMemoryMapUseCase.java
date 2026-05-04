@@ -21,8 +21,8 @@ public class GetMemoryMapUseCase {
     private final MemoryRecordMappingRepository memoryRecordMappingRepository;
     private final RecordRepository recordRepository;
 
-    public List<MemoryMapPinResponse> execute() {
-        Map<String, List<Memory>> locationMemoryMap = memoryGetService.getMemoriesWithLocation()
+    public List<MemoryMapPinResponse> execute(Long userId) {
+        Map<String, List<Memory>> locationMemoryMap = memoryGetService.getMemoriesWithLocation(userId)
                 .stream()
                 .collect(Collectors.groupingBy(Memory::getLocation));
 

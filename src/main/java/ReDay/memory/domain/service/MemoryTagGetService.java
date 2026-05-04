@@ -13,12 +13,12 @@ public class MemoryTagGetService {
 
     private final MemoryTagRepository memoryTagRepository;
 
-    public List<String> getAllTagNames() {
-        return memoryTagRepository.findAllDistinctTagNames();
+    public List<String> getAllTagNames(Long userId) {
+        return memoryTagRepository.findAllDistinctTagNamesByUserId(userId);
     }
 
-    public List<Memory> getMemoriesByTagName(String tagName) {
-        return memoryTagRepository.findAllByTagName(tagName)
+    public List<Memory> getMemoriesByTagName(Long userId, String tagName) {
+        return memoryTagRepository.findAllByTagNameAndUserId(tagName, userId)
                 .stream()
                 .map(MemoryTag::getMemory)
                 .distinct()

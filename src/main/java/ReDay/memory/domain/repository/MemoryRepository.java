@@ -10,22 +10,22 @@ import org.springframework.data.repository.query.Param;
 
 public interface MemoryRepository extends JpaRepository<Memory, Long> {
 
-    List<Memory> findAllByOrderByMemoryDateDesc();
+    List<Memory> findAllByUserIdOrderByMemoryDateDesc(Long userId);
 
-    @Query("SELECT m FROM Memory m WHERE " +
+    @Query("SELECT m FROM Memory m WHERE m.userId = :userId AND (" +
             "LOWER(m.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(m.summary) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(m.location) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "LOWER(m.location) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
             "ORDER BY m.memoryDate DESC")
-    List<Memory> searchByKeyword(@Param("keyword") String keyword);
+    List<Memory> searchByUserIdAndKeyword(@Param("userId") Long userId, @Param("keyword") String keyword);
 
-    List<Memory> findAllByMemoryDate(LocalDate date);
+    List<Memory> findAllByUserIdAndMemoryDate(Long userId, LocalDate date);
 
-    List<Memory> findAllByMemoryDateBetween(LocalDate startDate, LocalDate endDate);
+    List<Memory> findAllByUserIdAndMemoryDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
 
-    List<Memory> findAllByLocationIsNotNull();
+    List<Memory> findAllByUserIdAndLocationIsNotNull(Long userId);
 
-    List<Memory> findAllByLocation(String location);
+    List<Memory> findAllByUserIdAndLocation(Long userId, String location);
 
     long countByCreatedAtAfter(LocalDateTime dateTime);
 }
