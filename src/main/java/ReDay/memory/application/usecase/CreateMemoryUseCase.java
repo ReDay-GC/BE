@@ -5,6 +5,7 @@ import ReDay.memory.application.dto.response.MemoryListResponse;
 import ReDay.memory.application.mapper.MemoryMapper;
 import ReDay.memory.domain.entity.Memory;
 import ReDay.memory.domain.service.MemorySaveService;
+import ReDay.memory.infrastructure.AiEmbeddingClient;
 import ReDay.notification.domain.entity.NotificationType;
 import ReDay.notification.domain.service.NotificationSaveService;
 import java.util.List;
@@ -17,12 +18,15 @@ public class CreateMemoryUseCase {
 
     private final MemorySaveService memorySaveService;
     private final NotificationSaveService notificationSaveService;
+    private final AiEmbeddingClient aiEmbeddingClient;
 
     public MemoryListResponse execute(Long userId, MemorySaveRequest request) {
         Memory memory = memorySaveService.save(userId, request);
 
         List<String> tags = request.tags() != null ? request.tags() : List.of();
         List<String> people = request.people() != null ? request.people() : List.of();
+
+        aiEmbeddingClient.saveEmbedding(memory.getId(), memory.getTitle() + " " + memory.getSummary());
 
         notificationSaveService.save(
                 userId,
