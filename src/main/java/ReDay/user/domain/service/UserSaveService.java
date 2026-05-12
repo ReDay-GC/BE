@@ -2,6 +2,7 @@ package ReDay.user.domain.service;
 
 import ReDay.application.exception.BusinessException;
 import ReDay.application.exception.ErrorCode;
+import ReDay.config.jwt.JwtProvider;
 import ReDay.user.application.dto.request.SignUpRequest;
 import ReDay.user.application.dto.response.SignUpResponse;
 import ReDay.user.application.mapper.UserMapper;
@@ -18,6 +19,7 @@ public class UserSaveService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     @Transactional
     public SignUpResponse save(SignUpRequest request) {
@@ -33,6 +35,7 @@ public class UserSaveService {
         User user = UserMapper.toEntity(request, encodedPassword);
         User savedUser = userRepository.save(user);
 
-        return UserMapper.toResponse(savedUser);
+        String accessToken = jwtProvider.generateToken(savedUser.getId());
+        return UserMapper.toResponse(savedUser, accessToken);
     }
 }

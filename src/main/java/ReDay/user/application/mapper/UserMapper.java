@@ -16,11 +16,12 @@ public class UserMapper {
                 .build();
     }
 
-    public static SignUpResponse toResponse(User user) {
+    public static SignUpResponse toResponse(User user, String accessToken) {
         return new SignUpResponse(
                 user.getId(),
                 user.getEmail(),
-                user.getName()
+                user.getName(),
+                accessToken
         );
     }
 }
