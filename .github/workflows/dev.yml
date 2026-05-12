@@ -66,6 +66,7 @@ jobs:
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             INTERNAL_API_KEY=${{ secrets.INTERNAL_API_KEY }}
+            AI_SERVER_BASE_URL=${{ secrets.AI_SERVER_BASE_URL }}
             ENVEOF
             docker pull jinsung0927/reday:latest
             cd /home/ubuntu
