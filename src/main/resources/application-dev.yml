@@ -1,10 +1,6 @@
 swagger:
   server-url: ${SWAGGER_SERVER_URL:https://api.reday.com}
 
-ai:
-  server:
-    base-url: ${AI_SERVER_BASE_URL}
-
 jwt:
   expiration-ms: 2592000000   # 30d (dev 테스트용)
 

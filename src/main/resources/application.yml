@@ -33,10 +33,6 @@ openai:
     key: ${OPENAI_API_KEY}
     base-url: https://api.openai.com/v1
 
-ai:
-  server:
-    base-url: ${AI_SERVER_BASE_URL}
-
 cloud:
   aws:
     s3:
