@@ -21,13 +21,14 @@ public class AiSemanticSearchClient {
         this.aiServerRestClient = aiServerRestClient;
     }
 
+    // memories: [{memoryId, text}] 형태로 받습니다. text는 호출부에서 조립.
     // 실패 시 빈 리스트를 반환하며 호출부에서 키워드 검색으로 폴백합니다.
-    public List<Long> searchSemantic(String query, List<Long> memoryIds) {
-        if (memoryIds.isEmpty()) return List.of();
+    public List<Long> searchSemantic(String query, List<Map<String, Object>> memories) {
+        if (memories.isEmpty()) return List.of();
 
         Map<String, Object> requestBody = Map.of(
                 "query", query,
-                "memory_ids", memoryIds
+                "memories", memories
         );
 
         try {

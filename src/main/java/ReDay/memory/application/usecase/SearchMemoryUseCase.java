@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,8 +32,28 @@ public class SearchMemoryUseCase {
     public List<MemoryListResponse> execute(Long userId, MemorySearchRequest request) {
         List<Memory> allMemories = memoryGetService.getMemoryList(userId);
 
-        List<Long> memoryIds = allMemories.stream().map(Memory::getId).toList();
-        List<Long> rankedIds = aiSemanticSearchClient.searchSemantic(request.keyword(), memoryIds);
+        List<Map<String, Object>> memoryData = allMemories.stream()
+                .map(m -> {
+                    List<String> tags = memoryTagRepository.findAllByMemory(m).stream()
+                            .map(t -> t.getTagName()).toList();
+                    List<String> people = memoryPersonRepository.findAllByMemory(m).stream()
+                            .map(p -> p.getPersonName()).toList();
+
+                    String text = Stream.of(
+                            m.getTitle(),
+                            m.getSummary(),
+                            m.getDescription(),
+                            m.getEmotion(),
+                            m.getLocation(),
+                            String.join(" ", tags),
+                            String.join(" ", people)
+                    ).filter(s -> s != null && !s.isBlank()).collect(Collectors.joining(" "));
+
+                    return Map.<String, Object>of("memoryId", m.getId(), "text", text);
+                })
+                .toList();
+
+        List<Long> rankedIds = aiSemanticSearchClient.searchSemantic(request.keyword(), memoryData);
 
         List<Memory> orderedMemories = rankedIds.isEmpty()
                 ? fallbackToKeywordSearch(userId, request.keyword())
