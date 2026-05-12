@@ -28,4 +28,8 @@ public interface MemoryRepository extends JpaRepository<Memory, Long> {
     List<Memory> findAllByUserIdAndLocation(Long userId, String location);
 
     long countByCreatedAtAfter(LocalDateTime dateTime);
+
+    List<Memory> findAllByCreatedAtAfterOrderByCreatedAtDesc(LocalDateTime dateTime);
+
+    List<Memory> findAllByOrderByCreatedAtDesc();
 }

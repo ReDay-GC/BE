@@ -81,7 +81,12 @@ public enum ResponseMessage {
     ADMIN_NOTICE_LIST_FETCHED(1113, "공지 목록을 조회했습니다."),
     ADMIN_NOTICE_CREATED(1114, "공지사항이 등록되었습니다."),
     ADMIN_NOTICE_UPDATED(1115, "공지사항이 수정되었습니다."),
-    ADMIN_NOTICE_DELETED(1116, "공지사항이 삭제되었습니다.");
+    ADMIN_NOTICE_DELETED(1116, "공지사항이 삭제되었습니다."),
+
+    // Admin Stats List
+    ADMIN_TODAY_MEMORIES_FETCHED(1117, "오늘 생성된 기억 목록을 조회했습니다."),
+    ADMIN_ALL_MEMORIES_FETCHED(1118, "전체 기억 목록을 조회했습니다."),
+    ADMIN_ALL_RECORDS_FETCHED(1119, "전체 기록 목록을 조회했습니다.");
 
     private final int code;
     private final String message;
