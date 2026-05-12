@@ -49,7 +49,7 @@ public class SearchMemoryUseCase {
                             String.join(" ", people)
                     ).filter(s -> s != null && !s.isBlank()).collect(Collectors.joining(" "));
 
-                    return Map.<String, Object>of("memoryId", m.getId(), "text", text);
+                    return Map.<String, Object>of("memory_id", m.getId(), "text", text);
                 })
                 .toList();
 
