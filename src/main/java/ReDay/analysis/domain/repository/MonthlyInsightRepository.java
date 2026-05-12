@@ -9,4 +9,6 @@ public interface MonthlyInsightRepository extends JpaRepository<MonthlyInsight, 
     Optional<MonthlyInsight> findByUserIdAndYearAndMonth(Long userId, int year, int month);
 
     boolean existsByUserIdAndYearAndMonth(Long userId, int year, int month);
+
+    void deleteAllByUserId(Long userId);
 }

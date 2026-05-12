@@ -28,4 +28,8 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
 
     @Query("SELECT r FROM Record r WHERE r.id IN :ids AND r.latitude IS NOT NULL AND r.longitude IS NOT NULL ORDER BY r.id ASC")
     List<Record> findWithLocationByIds(@Param("ids") List<Long> ids);
+
+    List<Record> findAllByUserId(Long userId);
+
+    void deleteAllByUserId(Long userId);
 }
