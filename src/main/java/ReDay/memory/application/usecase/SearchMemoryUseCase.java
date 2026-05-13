@@ -90,10 +90,10 @@ public class SearchMemoryUseCase {
         if (emotion == null) return null;
         return switch (emotion) {
             case "HAPPY" -> "행복 행복한 행복하다 즐거움 즐거운 즐겁다";
-            case "EXCITED" -> "신남 신나는 신나다 신나게 설렘 설레는 설레다";
+            case "EXCITED" -> "신나는 신나다 신나게 설렘 설레는 설레다";
             case "SAD" -> "슬픔 슬픈 슬프다 힘듦 힘든 힘들다 지침 지친 지치다";
             case "CONTENT" -> "평온 평온한 평온하다 편안 편안한";
-            case "ANGRY" -> "화남 화난 화나다 짜증 짜증나는";
+            case "ANGRY" -> "화난 화나다 짜증 짜증나는";
             case "ANXIOUS" -> "불안 불안한 불안하다 걱정 걱정되는";
             default -> emotion;
         };
