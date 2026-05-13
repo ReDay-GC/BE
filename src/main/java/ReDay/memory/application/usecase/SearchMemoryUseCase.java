@@ -43,7 +43,7 @@ public class SearchMemoryUseCase {
                             m.getTitle(),
                             m.getSummary(),
                             m.getDescription(),
-                            m.getEmotion(),
+                            translateEmotion(m.getEmotion()),
                             m.getLocation(),
                             String.join(" ", tags),
                             String.join(" ", people)
@@ -84,5 +84,18 @@ public class SearchMemoryUseCase {
     private List<Memory> fallbackToKeywordSearch(Long userId, String keyword) {
         log.warn("[SearchMemoryUseCase] AI 시맨틱 검색 실패 — 키워드 검색으로 폴백: keyword={}", keyword);
         return memoryGetService.searchMemoryByKeyword(userId, keyword);
+    }
+
+    private String translateEmotion(String emotion) {
+        if (emotion == null) return null;
+        return switch (emotion) {
+            case "HAPPY" -> "행복한 즐거운";
+            case "EXCITED" -> "신나는 설레는";
+            case "SAD" -> "슬픈 힘든 지친";
+            case "CONTENT" -> "평온한";
+            case "ANGRY" -> "화난";
+            case "ANXIOUS" -> "불안한";
+            default -> emotion;
+        };
     }
 }
