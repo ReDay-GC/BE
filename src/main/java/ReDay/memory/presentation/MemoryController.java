@@ -15,6 +15,7 @@ import ReDay.memory.application.usecase.GetMemoryByDateUseCase;
 import ReDay.memory.application.usecase.GetMemoryCalendarUseCase;
 import ReDay.memory.application.usecase.GetMemoryDetailUseCase;
 import ReDay.memory.application.usecase.GetMemoryListUseCase;
+import ReDay.memory.application.usecase.SearchMemoryByEmotionUseCase;
 import ReDay.memory.application.usecase.SearchMemoryByLocationUseCase;
 import ReDay.memory.application.usecase.SearchMemoryByTagUseCase;
 import ReDay.memory.application.usecase.SearchMemoryUseCase;
@@ -49,6 +50,7 @@ public class MemoryController {
     private final GetAllTagsUseCase getAllTagsUseCase;
     private final SearchMemoryByTagUseCase searchMemoryByTagUseCase;
     private final SearchMemoryByLocationUseCase searchMemoryByLocationUseCase;
+    private final SearchMemoryByEmotionUseCase searchMemoryByEmotionUseCase;
 
     @Operation(summary = "기억 삭제", description = "기억 ID를 기준으로 기억을 삭제합니다.")
     @DeleteMapping("/{memoryId}")
@@ -176,6 +178,20 @@ public class MemoryController {
             @RequestParam String location
     ) {
         List<MemoryListResponse> response = searchMemoryByLocationUseCase.execute(userId, location);
+
+        return CommonResponse.success(
+                ResponseMessage.MEMORY_FETCHED,
+                response
+        );
+    }
+
+    @Operation(summary = "감정별 기억 검색", description = "특정 감정(즐거운, 설레는, 평온한, 신나는, 지친, 힘든, 평범한)으로 기억 목록을 조회합니다.")
+    @GetMapping("/search/emotion")
+    public CommonResponse<List<MemoryListResponse>> searchMemoryByEmotion(
+            @AuthenticationPrincipal Long userId,
+            @RequestParam String emotion
+    ) {
+        List<MemoryListResponse> response = searchMemoryByEmotionUseCase.execute(userId, emotion);
 
         return CommonResponse.success(
                 ResponseMessage.MEMORY_FETCHED,

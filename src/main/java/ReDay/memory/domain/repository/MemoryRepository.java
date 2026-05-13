@@ -32,4 +32,6 @@ public interface MemoryRepository extends JpaRepository<Memory, Long> {
     List<Memory> findAllByCreatedAtAfterOrderByCreatedAtDesc(LocalDateTime dateTime);
 
     List<Memory> findAllByOrderByCreatedAtDesc();
+
+    List<Memory> findAllByUserIdAndEmotionOrderByMemoryDateDesc(Long userId, String emotion);
 }
