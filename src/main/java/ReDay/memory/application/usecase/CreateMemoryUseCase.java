@@ -3,11 +3,14 @@ package ReDay.memory.application.usecase;
 import ReDay.memory.application.dto.request.MemorySaveRequest;
 import ReDay.memory.application.dto.response.MemoryListResponse;
 import ReDay.memory.application.mapper.MemoryMapper;
+import ReDay.memory.domain.entity.AiProcessingLog;
 import ReDay.memory.domain.entity.Memory;
+import ReDay.memory.domain.repository.AiProcessingLogRepository;
 import ReDay.memory.domain.service.MemorySaveService;
 import ReDay.memory.infrastructure.AiEmbeddingClient;
 import ReDay.notification.domain.entity.NotificationType;
 import ReDay.notification.domain.service.NotificationSaveService;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,8 +22,10 @@ public class CreateMemoryUseCase {
     private final MemorySaveService memorySaveService;
     private final NotificationSaveService notificationSaveService;
     private final AiEmbeddingClient aiEmbeddingClient;
+    private final AiProcessingLogRepository aiProcessingLogRepository;
 
     public MemoryListResponse execute(Long userId, MemorySaveRequest request) {
+        long startMs = System.currentTimeMillis();
         Memory memory = memorySaveService.save(userId, request);
 
         List<String> tags = request.tags() != null ? request.tags() : List.of();
@@ -35,6 +40,14 @@ public class CreateMemoryUseCase {
                 memory.getMemoryDate() + "에 추가한 기억이 아직 완성되지 않았어요",
                 memory.getId()
         );
+
+        aiProcessingLogRepository.save(AiProcessingLog.builder()
+                .memoryId(memory.getId())
+                .userId(userId)
+                .status("SUCCESS")
+                .responseTimeMs(System.currentTimeMillis() - startMs)
+                .processedAt(LocalDateTime.now())
+                .build());
 
         return MemoryMapper.toMemoryListResponse(memory, 0, tags, people);
     }
