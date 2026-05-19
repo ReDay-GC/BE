@@ -8,9 +8,11 @@ import ReDay.memory.application.dto.response.MemoryDetailResponse;
 import ReDay.memory.application.dto.response.MemoryListResponse;
 import ReDay.memory.application.dto.response.MemoryCalendarResponse;
 import ReDay.memory.application.dto.response.MemoryTagListResponse;
+import ReDay.memory.application.dto.request.MemoryUpdateRequest;
 import ReDay.memory.application.usecase.DeleteMemoryUseCase;
 import ReDay.memory.application.usecase.CreateMemoryUseCase;
 import ReDay.memory.application.usecase.GetAllTagsUseCase;
+import ReDay.memory.application.usecase.UpdateMemoryUseCase;
 import ReDay.memory.application.usecase.GetMemoryByDateUseCase;
 import ReDay.memory.application.usecase.GetMemoryCalendarUseCase;
 import ReDay.memory.application.usecase.GetMemoryDetailUseCase;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,6 +54,18 @@ public class MemoryController {
     private final SearchMemoryByTagUseCase searchMemoryByTagUseCase;
     private final SearchMemoryByLocationUseCase searchMemoryByLocationUseCase;
     private final SearchMemoryByEmotionUseCase searchMemoryByEmotionUseCase;
+    private final UpdateMemoryUseCase updateMemoryUseCase;
+
+    @Operation(summary = "기억 편집", description = "기억 ID를 기준으로 기억을 수정합니다.")
+    @PutMapping("/{memoryId}")
+    public CommonResponse<MemoryDetailResponse> updateMemory(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long memoryId,
+            @RequestBody MemoryUpdateRequest request) {
+        MemoryDetailResponse response = updateMemoryUseCase.execute(memoryId, request);
+
+        return CommonResponse.success(ResponseMessage.MEMORY_FETCHED, response);
+    }
 
     @Operation(summary = "기억 삭제", description = "기억 ID를 기준으로 기억을 삭제합니다.")
     @DeleteMapping("/{memoryId}")
