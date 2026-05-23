@@ -61,4 +61,18 @@ public class Record {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    public void update(
+            String textContent,
+            LocalDate recordDate,
+            String address,
+            Double latitude,
+            Double longitude
+    ) {
+        this.textContent = textContent;
+        this.recordDate = recordDate;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

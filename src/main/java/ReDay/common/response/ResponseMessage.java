@@ -20,6 +20,7 @@ public enum ResponseMessage {
     RECORD_CREATED(200, "기록이 저장되었습니다."),
     RECORD_DELETED(201, "기록이 삭제되었습니다."),
     RECORD_FETCHED(202, "기록을 조회했습니다."),
+    RECORD_UPDATED(203, "기록이 수정되었습니다."),
 
     // Memory
     MEMORY_GENERATED(300, "기억이 생성되었습니다."),

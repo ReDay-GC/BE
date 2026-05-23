@@ -7,6 +7,7 @@ import ReDay.record.application.dto.response.RecordListItemResponse;
 import ReDay.record.application.dto.response.RecordSaveResponse;
 import ReDay.record.application.dto.response.RecordLocationResponse;
 import ReDay.record.application.dto.response.RecordSummaryResponse;
+import ReDay.record.application.dto.request.RecordUpdateRequest;
 import ReDay.record.application.usecase.DeleteRecordUseCase;
 import ReDay.record.application.usecase.GetRecordDatesByMonthUseCase;
 import ReDay.record.application.usecase.GetRecordLocationsUseCase;
@@ -15,6 +16,7 @@ import ReDay.record.application.usecase.GetRecordsByDateUseCase;
 import ReDay.record.application.usecase.SavePhotoRecordUseCase;
 import ReDay.record.application.usecase.SaveTextRecordUseCase;
 import ReDay.record.application.usecase.SaveVoiceRecordUseCase;
+import ReDay.record.application.usecase.UpdateRecordUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,6 +56,7 @@ public class RecordController {
     private final SaveTextRecordUseCase saveTextRecordUseCase;
     private final SavePhotoRecordUseCase savePhotoRecordUseCase;
     private final SaveVoiceRecordUseCase saveVoiceRecordUseCase;
+    private final UpdateRecordUseCase updateRecordUseCase;
 
     @Operation(summary = "월별 기록 있는 날짜 목록 조회")
     @GetMapping("/dates")
@@ -87,6 +91,15 @@ public class RecordController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return CommonResponse.success(ResponseMessage.RECORD_FETCHED,
                 getRecordsByDateUseCase.execute(userId, date));
+    }
+
+    @Operation(summary = "기록 수정", description = "기록 ID를 기준으로 기억 조각을 수정합니다. textContent, recordDate, address, latitude, longitude 수정 가능.")
+    @PutMapping("/{recordId}")
+    public CommonResponse<RecordListItemResponse> updateRecord(
+            @PathVariable Long recordId,
+            @RequestBody RecordUpdateRequest request) {
+        return CommonResponse.success(ResponseMessage.RECORD_UPDATED,
+                updateRecordUseCase.execute(recordId, request));
     }
 
     @Operation(summary = "기록 삭제")
