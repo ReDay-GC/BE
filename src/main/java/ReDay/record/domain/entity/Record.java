@@ -44,7 +44,7 @@ public class Record {
     @Column
     private Integer voiceDurationSeconds;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "DATE")
     private LocalDate recordDate;
 
     @Column(nullable = false)
