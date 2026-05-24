@@ -15,9 +15,11 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     @Query(value = "SELECT DISTINCT DATE(record_date) FROM `record` WHERE user_id = :userId AND YEAR(DATE(record_date)) = :year AND MONTH(DATE(record_date)) = :month ORDER BY record_date", nativeQuery = true)
     List<LocalDate> findDistinctRecordDatesByMonth(@Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
 
-    List<Record> findByUserIdAndRecordDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
+    @Query(value = "SELECT * FROM `record` WHERE user_id = :userId AND DATE(record_date) BETWEEN :startDate AND :endDate", nativeQuery = true)
+    List<Record> findByUserIdAndRecordDateBetween(@Param("userId") Long userId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    List<Record> findByUserIdAndRecordDateGreaterThanEqual(Long userId, LocalDate startDate);
+    @Query(value = "SELECT * FROM `record` WHERE user_id = :userId AND DATE(record_date) >= :startDate", nativeQuery = true)
+    List<Record> findByUserIdAndRecordDateGreaterThanEqual(@Param("userId") Long userId, @Param("startDate") LocalDate startDate);
 
     long countByUserId(Long userId);
 
