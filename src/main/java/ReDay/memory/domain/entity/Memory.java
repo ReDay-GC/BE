@@ -35,7 +35,7 @@ public class Memory extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "DATE")
     private LocalDate memoryDate;
 
     @Column(length = 50)

@@ -19,7 +19,8 @@ public interface MemoryRepository extends JpaRepository<Memory, Long> {
             "ORDER BY m.memoryDate DESC")
     List<Memory> searchByUserIdAndKeyword(@Param("userId") Long userId, @Param("keyword") String keyword);
 
-    List<Memory> findAllByUserIdAndMemoryDate(Long userId, LocalDate date);
+    @Query(value = "SELECT * FROM memory WHERE user_id = :userId AND DATE(memory_date) = :date", nativeQuery = true)
+    List<Memory> findAllByUserIdAndMemoryDate(@Param("userId") Long userId, @Param("date") LocalDate date);
 
     List<Memory> findAllByUserIdAndMemoryDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
 
