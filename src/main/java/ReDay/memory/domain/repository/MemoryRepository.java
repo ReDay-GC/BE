@@ -22,7 +22,8 @@ public interface MemoryRepository extends JpaRepository<Memory, Long> {
     @Query(value = "SELECT * FROM memory WHERE user_id = :userId AND DATE(memory_date) = :date", nativeQuery = true)
     List<Memory> findAllByUserIdAndMemoryDate(@Param("userId") Long userId, @Param("date") LocalDate date);
 
-    List<Memory> findAllByUserIdAndMemoryDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
+    @Query(value = "SELECT * FROM memory WHERE user_id = :userId AND DATE(memory_date) BETWEEN :startDate AND :endDate", nativeQuery = true)
+    List<Memory> findAllByUserIdAndMemoryDateBetween(@Param("userId") Long userId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     List<Memory> findAllByUserIdAndLocationIsNotNull(Long userId);
 

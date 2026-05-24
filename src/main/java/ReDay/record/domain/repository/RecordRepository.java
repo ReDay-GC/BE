@@ -9,10 +9,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface RecordRepository extends JpaRepository<Record, Long> {
 
-    @Query(value = "SELECT * FROM record WHERE user_id = :userId AND DATE(record_date) = :recordDate", nativeQuery = true)
+    @Query(value = "SELECT * FROM `record` WHERE user_id = :userId AND DATE(record_date) = :recordDate", nativeQuery = true)
     List<Record> findByUserIdAndRecordDate(@Param("userId") Long userId, @Param("recordDate") LocalDate recordDate);
 
-    @Query(value = "SELECT DISTINCT DATE(record_date) FROM record WHERE user_id = :userId AND YEAR(DATE(record_date)) = :year AND MONTH(DATE(record_date)) = :month ORDER BY record_date", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT DATE(record_date) FROM `record` WHERE user_id = :userId AND YEAR(DATE(record_date)) = :year AND MONTH(DATE(record_date)) = :month ORDER BY record_date", nativeQuery = true)
     List<LocalDate> findDistinctRecordDatesByMonth(@Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
 
     List<Record> findByUserIdAndRecordDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
