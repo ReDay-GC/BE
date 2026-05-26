@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -22,9 +21,6 @@ public class AnalysisAiService {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private final RestClient openAIRestClient;
-
-    @Value("${openai.api.base-url}")
-    private String openAiBaseUrl;
 
     private static final String MODEL = "gpt-4o-mini";
     private static final String SYSTEM_PROMPT = """
@@ -52,7 +48,7 @@ public class AnalysisAiService {
 
         try {
             String responseBody = openAIRestClient.post()
-                    .uri(openAiBaseUrl + "/chat/completions")
+                    .uri("/chat/completions")
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(requestBody)
                     .retrieve()
