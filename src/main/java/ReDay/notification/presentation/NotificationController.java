@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -68,13 +67,13 @@ public class NotificationController {
     }
 
     @Operation(summary = "알림 설정 변경", description = "사용자의 알림 설정을 변경합니다.")
-    @PutMapping(value = "/settings", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<CommonResponse<NotificationSettingResponse>> updateNotificationSetting(
+    @PutMapping("/settings")
+    public CommonResponse<NotificationSettingResponse> updateNotificationSetting(
             @AuthenticationPrincipal Long userId,
             @RequestBody NotificationSettingRequest request
     ) {
         NotificationSettingResponse response = updateNotificationSettingUseCase.execute(userId, request);
 
-        return ResponseEntity.ok(CommonResponse.success(ResponseMessage.NOTIFICATION_SETTING_UPDATED, response));
+        return CommonResponse.success(ResponseMessage.NOTIFICATION_SETTING_UPDATED, response);
     }
 }
