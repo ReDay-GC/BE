@@ -13,6 +13,7 @@ public record MemorySaveRequest(
         String location,
         List<String> tags,
         List<String> people,
-        List<Long> recordIds
+        List<Long> recordIds,
+        Long aiProcessingTimeMs
 ) {
 }

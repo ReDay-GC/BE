@@ -25,7 +25,6 @@ public class CreateMemoryUseCase {
     private final AiProcessingLogRepository aiProcessingLogRepository;
 
     public MemoryListResponse execute(Long userId, MemorySaveRequest request) {
-        long startMs = System.currentTimeMillis();
         Memory memory = memorySaveService.save(userId, request);
 
         List<String> tags = request.tags() != null ? request.tags() : List.of();
@@ -41,11 +40,12 @@ public class CreateMemoryUseCase {
                 memory.getId()
         );
 
+        Long aiTimeMs = request.aiProcessingTimeMs() != null ? request.aiProcessingTimeMs() : -1L;
         aiProcessingLogRepository.save(AiProcessingLog.builder()
                 .memoryId(memory.getId())
                 .userId(userId)
                 .status("SUCCESS")
-                .responseTimeMs(System.currentTimeMillis() - startMs)
+                .responseTimeMs(aiTimeMs)
                 .processedAt(LocalDateTime.now())
                 .build());
 
