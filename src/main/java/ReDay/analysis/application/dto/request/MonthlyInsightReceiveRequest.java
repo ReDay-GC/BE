@@ -10,7 +10,8 @@ public record MonthlyInsightReceiveRequest(
         @NotNull Integer month,
         String insightText,
         @Valid List<PersonData> topPeople,
-        @Valid List<ActivityData> topActivities
+        @Valid List<ActivityData> topActivities,
+        Long aiProcessingTimeMs
 ) {
     public record PersonData(
             @NotNull String name,

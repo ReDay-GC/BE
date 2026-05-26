@@ -19,8 +19,6 @@ public class SaveMonthlyInsightUseCase {
     private final AiProcessingLogRepository aiProcessingLogRepository;
 
     public void execute(MonthlyInsightReceiveRequest request) {
-        long startMs = System.currentTimeMillis();
-
         List<PersonEntry> topPeople = request.topPeople() == null ? List.of() :
                 request.topPeople().stream()
                         .map(p -> new PersonEntry(p.name(), p.count()))
@@ -40,11 +38,12 @@ public class SaveMonthlyInsightUseCase {
                 topActivities
         );
 
+        long aiTimeMs = request.aiProcessingTimeMs() != null ? request.aiProcessingTimeMs() : -1L;
         aiProcessingLogRepository.save(AiProcessingLog.builder()
                 .memoryId(null)
                 .userId(request.userId())
                 .status("SUCCESS")
-                .responseTimeMs(System.currentTimeMillis() - startMs)
+                .responseTimeMs(aiTimeMs)
                 .processedAt(LocalDateTime.now())
                 .build());
     }
