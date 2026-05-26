@@ -2,10 +2,15 @@ package ReDay.memory.domain.service;
 
 import ReDay.memory.application.exception.MemoryAnalysisFailedException;
 import ReDay.memory.domain.entity.AiProcessingLog;
+import ReDay.memory.domain.entity.Memory;
 import ReDay.memory.domain.entity.MemoryAnalysis;
 import ReDay.memory.domain.repository.AiProcessingLogRepository;
 import ReDay.memory.domain.repository.MemoryAnalysisRepository;
+import ReDay.memory.domain.repository.MemoryRepository;
+import ReDay.memory.infrastructure.AiMemoryAnalysisClient;
+import ReDay.memory.infrastructure.AiMemoryAnalysisClient.AnalysisResult;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +21,8 @@ public class MemoryAnalysisService {
 
     private final MemoryAnalysisRepository memoryAnalysisRepository;
     private final AiProcessingLogRepository aiProcessingLogRepository;
+    private final MemoryRepository memoryRepository;
+    private final AiMemoryAnalysisClient aiMemoryAnalysisClient;
 
     @Transactional(readOnly = true)
     public MemoryAnalysis getAnalysis(Long memoryId) {
@@ -26,32 +33,50 @@ public class MemoryAnalysisService {
     @Transactional
     public MemoryAnalysis analyze(Long memoryId, Long userId) {
         long startTime = System.currentTimeMillis();
-        String status = "SUCCESS";
 
         try {
+            Memory memory = memoryRepository.findById(memoryId)
+                    .orElseThrow(MemoryAnalysisFailedException::new);
+
+            String text = buildText(memory);
+
+            AnalysisResult result = aiMemoryAnalysisClient.analyzeText(text);
+            List<String> keywords = aiMemoryAnalysisClient.extractKeywords(text);
+
             MemoryAnalysis analysis = MemoryAnalysis.builder()
                     .memoryId(memoryId)
-                    .emotionResult("NEUTRAL")
-                    .keywords(java.util.List.of("일상", "기록"))
-                    .placeSummary("특정 장소 없음")
-                    .activitySummary("일상적인 활동")
-                    .overallSummary("하루의 기록이 정리되었습니다.")
+                    .emotionResult(result.emotion())
+                    .keywords(keywords)
+                    .placeSummary(memory.getLocation() != null ? memory.getLocation() : "장소 정보 없음")
+                    .activitySummary(result.activityHint())
+                    .overallSummary(result.summary())
                     .build();
 
             MemoryAnalysis saved = memoryAnalysisRepository.save(analysis);
 
-            long responseTimeMs = System.currentTimeMillis() - startTime;
-            saveLog(memoryId, userId, status, responseTimeMs);
-
+            saveLog(memoryId, userId, "SUCCESS", System.currentTimeMillis() - startTime);
             return saved;
+
+        } catch (MemoryAnalysisFailedException e) {
+            saveLog(memoryId, userId, "FAILED", System.currentTimeMillis() - startTime);
+            throw e;
         } catch (Exception e) {
-            long responseTimeMs = System.currentTimeMillis() - startTime;
-            saveLog(memoryId, userId, "FAILED", responseTimeMs);
+            saveLog(memoryId, userId, "FAILED", System.currentTimeMillis() - startTime);
             throw new MemoryAnalysisFailedException();
         }
     }
 
-    private void saveLog(Long memoryId, Long userId, String status, Long responseTimeMs) {
+    private String buildText(Memory memory) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(memory.getTitle()).append("\n");
+        sb.append(memory.getSummary());
+        if (memory.getDescription() != null && !memory.getDescription().isBlank()) {
+            sb.append("\n").append(memory.getDescription());
+        }
+        return sb.toString();
+    }
+
+    private void saveLog(Long memoryId, Long userId, String status, long responseTimeMs) {
         aiProcessingLogRepository.save(AiProcessingLog.builder()
                 .memoryId(memoryId)
                 .userId(userId)
