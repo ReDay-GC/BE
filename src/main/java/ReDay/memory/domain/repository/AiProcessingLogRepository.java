@@ -15,7 +15,7 @@ public interface AiProcessingLogRepository extends JpaRepository<AiProcessingLog
 
     long countByStatus(String status);
 
-    @Query("SELECT AVG(a.responseTimeMs) FROM AiProcessingLog a")
+    @Query("SELECT AVG(a.responseTimeMs) FROM AiProcessingLog a WHERE a.responseTimeMs >= 0")
     Double findAverageResponseTimeMs();
 
     void deleteAllByUserId(Long userId);

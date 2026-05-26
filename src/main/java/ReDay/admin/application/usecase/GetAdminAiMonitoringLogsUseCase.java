@@ -37,7 +37,9 @@ public class GetAdminAiMonitoringLogsUseCase {
     private AdminAiMonitoringLogResponse toResponse(AiProcessingLog log, Map<Long, String> userNames) {
         String userName = userNames.getOrDefault(log.getUserId(), "알 수 없음");
         String formattedMemoryId = formatMemoryId(log.getMemoryId(), log.getProcessedAt());
-        double responseTimeSec = Math.round(log.getResponseTimeMs() / 10.0) / 100.0;
+        Double responseTimeSec = log.getResponseTimeMs() < 0
+                ? null
+                : Math.round(log.getResponseTimeMs() / 10.0) / 100.0;
 
         return new AdminAiMonitoringLogResponse(
                 log.getId(),

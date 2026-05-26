@@ -8,7 +8,7 @@ public record AdminAiMonitoringLogResponse(
         Long userId,
         String userName,
         String status,
-        double responseTimeSec,
+        Double responseTimeSec,
         LocalDateTime processedAt
 ) {
 }
