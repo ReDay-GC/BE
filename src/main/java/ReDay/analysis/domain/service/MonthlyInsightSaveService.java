@@ -6,9 +6,12 @@ import ReDay.analysis.domain.entity.PersonEntry;
 import ReDay.analysis.domain.repository.MonthlyInsightRepository;
 import ReDay.analysis.infrastructure.AnalysisAiService;
 import ReDay.analysis.infrastructure.AnalysisAiService.AiInsightResult;
+import ReDay.memory.domain.entity.AiProcessingLog;
+import ReDay.memory.domain.repository.AiProcessingLogRepository;
 import ReDay.record.domain.entity.Record;
 import ReDay.record.domain.repository.RecordRepository;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,7 @@ public class MonthlyInsightSaveService {
     private final MonthlyInsightRepository monthlyInsightRepository;
     private final RecordRepository recordRepository;
     private final AnalysisAiService analysisAiService;
+    private final AiProcessingLogRepository aiProcessingLogRepository;
 
     @Transactional
     public MonthlyInsight generateAndSave(Long userId, int year, int month) {
@@ -37,7 +41,27 @@ public class MonthlyInsightSaveService {
                 .map(r -> "- " + r.getRecordDate() + ": " + r.getTextContent())
                 .collect(Collectors.joining("\n"));
 
-        AiInsightResult result = analysisAiService.generateInsight(year, month, recordsText);
+        long startMs = System.currentTimeMillis();
+        AiInsightResult result;
+        try {
+            result = analysisAiService.generateInsight(year, month, recordsText);
+            aiProcessingLogRepository.save(AiProcessingLog.builder()
+                    .memoryId(null)
+                    .userId(userId)
+                    .status("SUCCESS")
+                    .responseTimeMs(System.currentTimeMillis() - startMs)
+                    .processedAt(LocalDateTime.now())
+                    .build());
+        } catch (Exception e) {
+            aiProcessingLogRepository.save(AiProcessingLog.builder()
+                    .memoryId(null)
+                    .userId(userId)
+                    .status("FAILED")
+                    .responseTimeMs(System.currentTimeMillis() - startMs)
+                    .processedAt(LocalDateTime.now())
+                    .build());
+            throw e;
+        }
 
         List<PersonEntry> topPeople = result.topPeople().stream()
                 .map(p -> new PersonEntry(p.name(), p.count()))
